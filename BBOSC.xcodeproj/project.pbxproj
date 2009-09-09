@@ -30,8 +30,9 @@
 		FC5209AC1056853800FE3004 /* BBOSCPluginReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = FC5209AB1056853800FE3004 /* BBOSCPluginReceiver.m */; };
 		FC520AD61056B6F200FE3004 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */; };
 		FC520AD91056B6FD00FE3004 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */; };
-		FC520B0A1056B90000FE3004 /* BBOSCSender.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC520AC11056B56400FE3004 /* BBOSCSender.xib */; };
+		FC520B0A1056B90000FE3004 /* BBOSCSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC520AC11056B56400FE3004 /* BBOSCSettings.xib */; };
 		FC520BFC1057E69B00FE3004 /* NSArrayExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520BFB1057E69B00FE3004 /* NSArrayExtensions.m */; };
+		FC520CFB1058085100FE3004 /* BBOSCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520CFA1058085100FE3004 /* BBOSCViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,10 +117,12 @@
 		FC52093910567D6200FE3004 /* Target-QCPlugin.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Target-QCPlugin.xcconfig"; path = "/Code/Config/Target-QCPlugin.xcconfig"; sourceTree = "<absolute>"; };
 		FC5209AA1056853800FE3004 /* BBOSCPluginReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBOSCPluginReceiver.h; sourceTree = "<group>"; };
 		FC5209AB1056853800FE3004 /* BBOSCPluginReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBOSCPluginReceiver.m; sourceTree = "<group>"; };
-		FC520AC11056B56400FE3004 /* BBOSCSender.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BBOSCSender.xib; sourceTree = "<group>"; };
+		FC520AC11056B56400FE3004 /* BBOSCSettings.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BBOSCSettings.xib; sourceTree = "<group>"; };
 		FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = lib/BWToolkitFramework.framework; sourceTree = "<group>"; };
 		FC520BFA1057E69B00FE3004 /* NSArrayExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtensions.h; sourceTree = "<group>"; };
 		FC520BFB1057E69B00FE3004 /* NSArrayExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtensions.m; sourceTree = "<group>"; };
+		FC520CF91058085100FE3004 /* BBOSCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBOSCViewController.h; sourceTree = "<group>"; };
+		FC520CFA1058085100FE3004 /* BBOSCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBOSCViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,7 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				8D5B49B7048680CD000E48DA /* Info.plist */,
-				FC520AC11056B56400FE3004 /* BBOSCSender.xib */,
+				FC520AC11056B56400FE3004 /* BBOSCSettings.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -179,6 +182,8 @@
 				FC5209AB1056853800FE3004 /* BBOSCPluginReceiver.m */,
 				FC520BFA1057E69B00FE3004 /* NSArrayExtensions.h */,
 				FC520BFB1057E69B00FE3004 /* NSArrayExtensions.m */,
+				FC520CF91058085100FE3004 /* BBOSCViewController.h */,
+				FC520CFA1058085100FE3004 /* BBOSCViewController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -313,7 +318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC520B0A1056B90000FE3004 /* BBOSCSender.xib in Resources */,
+				FC520B0A1056B90000FE3004 /* BBOSCSettings.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +348,7 @@
 				16BA95420A7EB2EB001E4983 /* BBOSCPlugInSender.m in Sources */,
 				FC5209AC1056853800FE3004 /* BBOSCPluginReceiver.m in Sources */,
 				FC520BFC1057E69B00FE3004 /* NSArrayExtensions.m in Sources */,
+				FC520CFB1058085100FE3004 /* BBOSCViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

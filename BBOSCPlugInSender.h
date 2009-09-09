@@ -8,12 +8,6 @@
 
 #import <Quartz/Quartz.h>
 
-@interface BBOSCPlugInSenderViewController : QCPlugInViewController {}
-@property (nonatomic, readonly, assign) IBOutlet NSPopUpButton* portTypeDropDown;
-@property (nonatomic, readonly, assign) IBOutlet NSArrayController* portArrayController;
--(IBAction)addNewPort:(id)sender;
-@end
-
 @class OSCManager, OSCOutPort;
 @interface BBOSCPlugInSender : QCPlugIn {
 

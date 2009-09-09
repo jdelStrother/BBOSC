@@ -10,25 +10,13 @@
 #import <OpenGL/CGLMacro.h>
 #import "vvosc/FrameworkSrc/VVOSC.h"
 
+#import "BBOSCViewController.h"
 #import "BBOSCPlugInSender.h"
 #import "NSArrayExtensions.h"
 
 #define	kQCPlugIn_Name				@"BBOSC Sender"
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control sender plugin"
 
-NSString* BBOSCTypeKey=@"BBOSCType";
-NSString* BBOSCPortKey=@"BBOSCPortKey";
-
-typedef enum {
-	BBOSCTypeInt,
-	BBOSCTypeFloat,
-	BBOSCTypeBool,	
-	BBOSCTypeString,
-	BBOSCTypeArrayOfInt,
-	BBOSCTypeArrayOfFloat,
-	BBOSCTypeArrayOfBool,
-	BBOSCTypeCount
-} BBOSCType;
 
 @interface OSCMessage(BBExtensions)
 -(void)addNSValue:(id)newValue withBias:(BBOSCType)bias;
@@ -67,54 +55,6 @@ typedef enum {
 }
 @end
 
-@interface BBOSCTypeToStringTransformer : NSValueTransformer
-+ (id) transformer;
-@end
-@implementation BBOSCTypeToStringTransformer
-+ (id) transformer {
-	return [[[self alloc] init] autorelease];
-}
-+ (Class)transformedValueClass { return [NSString class]; }
-+ (BOOL)allowsReverseTransformation { return NO; }
-- (id)transformedValue:(id)value {
-	switch ([value intValue]) {
-		case BBOSCTypeInt: return @"Integer";
-		case BBOSCTypeFloat: return @"Float";
-		case BBOSCTypeBool: return @"Boolean";
-		case BBOSCTypeString: return @"String";
-		case BBOSCTypeArrayOfInt: return @"Array w/ Int bias";
-		case BBOSCTypeArrayOfFloat: return @"Array w/ Float bias";
-		case BBOSCTypeArrayOfBool: return @"Array w/ Bool bias";
-	}
-	NSAssert1(NO, @"Bad OSC type value %@", value);
-}
-@end
-
-@implementation BBOSCPlugInSenderViewController
-@synthesize portTypeDropDown, portArrayController;
-
--(void)setPortTypeDropDown:(NSPopUpButton*)popup {
-	// Initialize the popup with all our port types
-	portTypeDropDown = popup;
-	[portTypeDropDown removeAllItems];
-	NSMutableArray* portTypes = [NSMutableArray array];
-	BBOSCTypeToStringTransformer* transformer = [BBOSCTypeToStringTransformer transformer];
-	for(int i=0; i<BBOSCTypeCount; i++) {
-		[portTypes addObject:[transformer transformedValue:[NSNumber numberWithInt:i]]];
-	}
-	[portTypeDropDown addItemsWithTitles:portTypes];
-}
-
--(void)addNewPort:(id)sender {
-	NSMutableDictionary* newPort = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									[NSNumber numberWithInt:[portTypeDropDown indexOfSelectedItem]],BBOSCTypeKey,
-									[[NSProcessInfo processInfo] globallyUniqueString], BBOSCPortKey, nil
-									];
-	[portArrayController addObject:newPort];
-}
-
-@end
-
 
 
 @interface BBOSCPlugInSender ()
@@ -127,12 +67,6 @@ typedef enum {
 @implementation BBOSCPlugInSender
 @synthesize oscManager, oscPort, oscParameters;
 @dynamic inputBroadcastPort, inputBroadcastPath;
-
-+(void)initialize {
-	if (self == [BBOSCPlugInSender class]) {
-		[NSValueTransformer setValueTransformer:[BBOSCTypeToStringTransformer transformer] forName:@"BBOSCTypeToStringTransformer"];
-	}
-}
 
 + (NSDictionary*) attributes
 {
@@ -206,8 +140,8 @@ typedef enum {
 
 - (QCPlugInViewController*) createViewController
 {
-	return [[BBOSCPlugInSenderViewController alloc] initWithPlugIn:self
-											  viewNibName:@"BBOSCSender"];
+	return [[BBOSCViewController alloc] initWithPlugIn:self
+										   viewNibName:@"BBOSCSettings"];
 }
 
 + (NSArray*) plugInKeys {
@@ -230,28 +164,10 @@ typedef enum {
 	for(NSDictionary* port in oscParameters) {
 		NSString* key = [port objectForKey:BBOSCPortKey];
 		NSNumber* oscType = [port objectForKey:BBOSCTypeKey];
-		NSString* qcType;
-		switch([oscType intValue]) {
-			case BBOSCTypeBool:
-				qcType = QCPortTypeBoolean;
-				break;
-			case BBOSCTypeInt:
-				qcType = QCPortTypeIndex;
-				break;
-			case BBOSCTypeFloat:
-				qcType = QCPortTypeNumber;
-				break;
-			case BBOSCTypeString:
-				qcType = QCPortTypeString;
-				break;
-			default:
-				qcType = QCPortTypeStructure;
-				break;
-		}
 		NSString* name = [NSString stringWithFormat:@"OSC-%@", [[BBOSCTypeToStringTransformer transformer] transformedValue:oscType]];
 		NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys:name, QCPortAttributeNameKey, nil];
 
-		[self addInputPortWithType:qcType forKey:key withAttributes:attributes];
+		[self addInputPortWithType:QCTypeForOSCType([oscType intValue]) forKey:key withAttributes:attributes];
 	}
 }
 
