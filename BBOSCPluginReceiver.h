@@ -9,14 +9,18 @@
 #import <Quartz/Quartz.h>
 
 @class OSCManager, OSCInPort;
-@interface BBOSCPluginReceiver : QCPlugIn
-{
-	OSCManager				*oscManager;
-    OSCInPort				*oscPort;
+@interface BBOSCPluginReceiver : QCPlugIn {
 	NSMutableArray* messages;
 	NSLock* messageLock;
 }
+@property (nonatomic, readonly, retain) NSString* listeningPath;
 
-@property (nonatomic, readwrite, assign) NSArray* outputStructure;
+@property (nonatomic, readonly, retain) NSArray* oscParameters;
 
+@property (nonatomic, readonly, retain) OSCManager *oscManager;
+@property (nonatomic, readonly, retain) OSCInPort *oscPort;  
+
+@property (nonatomic, readwrite, assign) NSUInteger inputReceivingPort;
+@property (nonatomic, readwrite, assign) NSString* inputReceivingPath;
+@property (nonatomic, readwrite, assign) BOOL outputMessageReceived;
 @end

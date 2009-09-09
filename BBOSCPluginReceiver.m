@@ -8,14 +8,24 @@
 
 /* It's highly recommended to use CGL macros instead of changing the current context for plug-ins that perform OpenGL rendering */
 #import <OpenGL/CGLMacro.h>
-#import "vvosc/FrameworkSrc/VVOSC.h"
 #import "BBOSCPluginReceiver.h"
+#import "BBOSCViewController.h"
+#import "NSArrayExtensions.h"
+#import "OSCExtensions.h"
 
 #define	kQCPlugIn_Name				@"BBOSC Receiver"
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control receiver plugin"
 
+@interface BBOSCPluginReceiver ()
+@property (nonatomic, readwrite, retain) OSCManager *oscManager;
+@property (nonatomic, readwrite, retain) OSCOutPort *oscPort;
+@property (nonatomic, readwrite, retain) NSArray* oscParameters;
+@property (nonatomic, readwrite, retain) NSString* listeningPath;
+@end
+
 @implementation BBOSCPluginReceiver
-@dynamic outputStructure;
+@dynamic inputReceivingPort, inputReceivingPath, outputMessageReceived;
+@synthesize oscManager, oscPort, oscParameters, listeningPath;
 
 + (NSDictionary*) attributes
 {
@@ -31,6 +41,17 @@
 	/*
 	Specify the optional attributes for property based ports (QCPortAttributeNameKey, QCPortAttributeDefaultValueKey...).
 	*/
+	if ([key isEqualToString:@"inputReceivingPort"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Receiving Port", QCPortAttributeNameKey,
+				[NSNumber numberWithInt:60000], QCPortAttributeDefaultValueKey, nil];
+	}
+	if ([key isEqualToString:@"inputReceivingPath"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Receiving Path", QCPortAttributeNameKey,
+				@"", QCPortAttributeDefaultValueKey, nil];
+	}
+	if ([key isEqualToString:@"outputMessageReceived"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Message Received", QCPortAttributeNameKey, nil];
+	}
 	
 	return nil;
 }
@@ -56,10 +77,11 @@
 - (id) init
 {
 	if(self = [super init]) {
-		oscManager = [[OSCManager alloc] init];
-		oscManager.delegate = self;
+		self.oscManager = [[[OSCManager alloc] init] autorelease];
+		self.oscManager.delegate = self;
+		self.oscParameters = [NSArray array];
 		messages = [[NSMutableArray alloc] init];
-		messageLock = [[NSLock alloc] init];
+		messageLock = [[NSLock alloc] init];		
 	}
 	
 	return self;
@@ -81,16 +103,51 @@
 	[oscManager release];
 	[messages release];
 	[messageLock release];
+	[listeningPath release];
+	[oscParameters release];
 	[super dealloc];
 }
 
-- (void) receivedOSCMessage:(OSCMessage *)m {
-	// TODO : Needs to be thread safe
-	if ([[m address] isEqualToString:@"/test"]) {
-		[messageLock lock];
-		[messages addObject:m];
-		[messageLock unlock];
+- (QCPlugInViewController*) createViewController
+{
+	return [[BBOSCViewController alloc] initWithPlugIn:self
+										   viewNibName:@"BBOSCSettings"];
+}
+
++ (NSArray*) plugInKeys {
+	return [NSArray arrayWithObjects:@"oscParameters", nil];
+}
+
+-(void)setOscParameters:(NSArray*)params {
+	NSArray* originalPortKeys = [oscParameters map:^(id port){ return [port objectForKey:BBOSCPortKey]; }];
+	
+	[self willChangeValueForKey:@"oscParameters"];
+	[oscParameters release];
+	oscParameters = [params retain];
+	[self didChangeValueForKey:@"oscParameters"];
+	
+	// Bleh, just trash all the original input ports
+	for(NSString* portKey in originalPortKeys) {
+		[self removeOutputPortForKey:portKey];
 	}
+	
+	for(NSDictionary* port in oscParameters) {
+		NSString* key = [port objectForKey:BBOSCPortKey];
+		NSNumber* oscType = [port objectForKey:BBOSCTypeKey];
+		NSString* name = [NSString stringWithFormat:@"OSC-%@", [[BBOSCTypeToStringTransformer transformer] transformedValue:oscType]];
+		NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys:name, QCPortAttributeNameKey, nil];
+		
+		[self addOutputPortWithType:QCTypeForOSCType([oscType intValue]) forKey:key withAttributes:attributes];
+	}
+}
+
+
+- (void) receivedOSCMessage:(OSCMessage *)m {
+	[messageLock lock];
+	if ([[m address] hasPrefix:self.listeningPath]) {
+		[messages addObject:m];
+	}
+	[messageLock unlock];
 }
 @end
 
@@ -102,7 +159,6 @@
 	Called by Quartz Composer when rendering of the composition starts: perform any required setup for the plug-in.
 	Return NO in case of fatal failure (this will prevent rendering of the composition to start).
 	*/
-	oscPort = [[oscManager createNewInputForPort:60000 withLabel:@"BB OSC"] retain];
 	return YES;
 }
 
@@ -124,31 +180,40 @@
 	CGLContextObj cgl_ctx = [context CGLContextObj];
 	*/
 	
+	if ([self didValueForInputKeyChange:@"inputReceivingPort"]) {
+		if (self.oscPort)
+			[self.oscManager removeInput:self.oscPort];
+		self.oscPort = [self.oscManager createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
+	}
+	
+	if ([self didValueForInputKeyChange:@"inputReceivingPath"]) {
+		[messageLock lock];
+		self.listeningPath = self.inputReceivingPath;
+		[messages removeAllObjects];
+		[messageLock unlock];
+	}
+	
 	[messageLock lock];
-	if ([messages count]>0) {
+	if ([messages count]==0) {
+		self.outputMessageReceived = NO;
+	} else {
+		self.outputMessageReceived = YES;
+		
 		OSCMessage* message = [messages objectAtIndex:0];
-		NSLog(@"Yay %@", message);
-		NSMutableArray* messageContent = [NSMutableArray array];
-		for(OSCValue* oscValue in [message valueArray]) {
-			switch (oscValue.type) {
-				case OSCValInt:
-					[messageContent addObject:[NSNumber numberWithInt:[oscValue intValue]]];
-					break;
-				case OSCValFloat:
-					[messageContent addObject:[NSNumber numberWithFloat:[oscValue floatValue]]];
-					break;
-				case OSCValString:
-					[messageContent addObject:[oscValue stringValue]];
-					break;
-				case OSCValBool:
-					[messageContent addObject:[NSNumber numberWithBool:[oscValue boolValue]]];
-					break;
-				default:
-					NSLog(@"Ignoring object value %@", oscValue);
-					break;
-			}
+		
+		NSUInteger valueIndex=0;
+		for(NSDictionary* port in oscParameters) {
+			BBOSCType expectedType = [[port objectForKey:BBOSCTypeKey] intValue];
+			NSString* portKey = [port objectForKey:BBOSCPortKey];
+						
+			id outputValue = [message readNSValueFromPosition:&valueIndex withBias:expectedType];
+			// Grr, no assigning arrays to QCStructures.  rdar://5672284
+			if ([outputValue isKindOfClass:[NSArray class]])
+				outputValue = [outputValue qcStructure];
+			
+			[self setValue:outputValue forOutputKey:portKey];
 		}
-		self.outputStructure = messageContent;
+
 		[messages removeObjectAtIndex:0];
 	}
 	[messageLock unlock];

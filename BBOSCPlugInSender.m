@@ -8,8 +8,7 @@
 
 /* It's highly recommended to use CGL macros instead of changing the current context for plug-ins that perform OpenGL rendering */
 #import <OpenGL/CGLMacro.h>
-#import "vvosc/FrameworkSrc/VVOSC.h"
-
+#import "OSCExtensions.h"
 #import "BBOSCViewController.h"
 #import "BBOSCPlugInSender.h"
 #import "NSArrayExtensions.h"
@@ -18,50 +17,10 @@
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control sender plugin"
 
 
-@interface OSCMessage(BBExtensions)
--(void)addNSValue:(id)newValue withBias:(BBOSCType)bias;
-@end
-@implementation OSCMessage(BBExtensions)
--(void)addNSValue:(id)newValue withBias:(BBOSCType)bias {
-
-	if ([newValue isKindOfClass:[NSString class]]) {
-		[self addString:newValue];
-		
-	} else if ([newValue isKindOfClass:[NSNumber class]]) {
-		switch(bias) {
-			case BBOSCTypeBool:
-				[self addBOOL:[newValue boolValue]];
-				break;
-			case BBOSCTypeInt:
-				[self addInt:[newValue intValue]];
-				break;
-			case BBOSCTypeFloat:
-				[self addFloat:[newValue floatValue]];
-				break;
-			default:
-				NSAssert2(NO, @"Bad type %d for %@", bias, newValue);
-		}
-	
-	} else if ([newValue isKindOfClass:[NSArray class]]) {
-		NSAssert2(bias>=BBOSCTypeArrayOfInt && bias<=BBOSCTypeArrayOfBool, @"Unexpected value %@ for type %d", newValue, bias);
-		// We've got an array - add all the subvalues into the message, using the appropriate type (eg if we're using BBOSCTypeArrayOfFloat, subvalues should use BBOSCTypeFloat)
-		for(id subvalue in newValue) {
-			[self addNSValue:subvalue withBias:bias-4];
-		}
-		
-	} else {
-		[self addBOOL:!!newValue];
-	}
-}
-@end
-
-
-
 @interface BBOSCPlugInSender ()
 @property (nonatomic, readwrite, retain) OSCManager *oscManager;
 @property (nonatomic, readwrite, retain) OSCOutPort *oscPort;
 @property (nonatomic, readwrite, retain) NSArray* oscParameters;
-
 @end
 
 @implementation BBOSCPlugInSender
@@ -169,10 +128,6 @@
 
 		[self addInputPortWithType:QCTypeForOSCType([oscType intValue]) forKey:key withAttributes:attributes];
 	}
-}
-
--(NSArray*)oscParameters {
-	return oscParameters;
 }
 
 @end

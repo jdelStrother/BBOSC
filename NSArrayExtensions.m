@@ -33,4 +33,13 @@
 	}
 	return new;
 }
+
+-(NSDictionary*)qcStructure {
+	int i=0;
+	NSMutableDictionary* result = [NSMutableDictionary dictionary];
+	for(id object in self) {
+		[result setObject:object forKey:[NSNumber numberWithInt:i++]];
+	}
+	return result;
+}
 @end

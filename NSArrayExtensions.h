@@ -11,4 +11,6 @@
 
 @interface NSArray(BBExtensions)
 - (NSArray *)map: (id (^)(id obj))block;
+- (NSArray *)select: (BOOL (^)(id obj))block;
+-(NSDictionary*)qcStructure;
 @end
