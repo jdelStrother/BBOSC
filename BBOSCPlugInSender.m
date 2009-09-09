@@ -11,13 +11,128 @@
 #import "vvosc/FrameworkSrc/VVOSC.h"
 
 #import "BBOSCPlugInSender.h"
+#import "NSArrayExtensions.h"
 
 #define	kQCPlugIn_Name				@"BBOSC Sender"
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control sender plugin"
 
-@implementation BBOSCPlugInSender
+NSString* BBOSCTypeKey=@"BBOSCType";
+NSString* BBOSCPortKey=@"BBOSCPortKey";
 
-@dynamic inputStructure;
+typedef enum {
+	BBOSCTypeInt,
+	BBOSCTypeFloat,
+	BBOSCTypeBool,	
+	BBOSCTypeString,
+	BBOSCTypeArrayOfInt,
+	BBOSCTypeArrayOfFloat,
+	BBOSCTypeArrayOfBool,
+	BBOSCTypeCount
+} BBOSCType;
+
+@interface OSCMessage(BBExtensions)
+-(void)addNSValue:(id)newValue withBias:(BBOSCType)bias;
+@end
+@implementation OSCMessage(BBExtensions)
+-(void)addNSValue:(id)newValue withBias:(BBOSCType)bias {
+
+	if ([newValue isKindOfClass:[NSString class]]) {
+		[self addString:newValue];
+		
+	} else if ([newValue isKindOfClass:[NSNumber class]]) {
+		switch(bias) {
+			case BBOSCTypeBool:
+				[self addBOOL:[newValue boolValue]];
+				break;
+			case BBOSCTypeInt:
+				[self addInt:[newValue intValue]];
+				break;
+			case BBOSCTypeFloat:
+				[self addFloat:[newValue floatValue]];
+				break;
+			default:
+				NSAssert2(NO, @"Bad type %d for %@", bias, newValue);
+		}
+	
+	} else if ([newValue isKindOfClass:[NSArray class]]) {
+		NSAssert2(bias>=BBOSCTypeArrayOfInt && bias<=BBOSCTypeArrayOfBool, @"Unexpected value %@ for type %d", newValue, bias);
+		// We've got an array - add all the subvalues into the message, using the appropriate type (eg if we're using BBOSCTypeArrayOfFloat, subvalues should use BBOSCTypeFloat)
+		for(id subvalue in newValue) {
+			[self addNSValue:subvalue withBias:bias-4];
+		}
+		
+	} else {
+		[self addBOOL:!!newValue];
+	}
+}
+@end
+
+@interface BBOSCTypeToStringTransformer : NSValueTransformer
++ (id) transformer;
+@end
+@implementation BBOSCTypeToStringTransformer
++ (id) transformer {
+	return [[[self alloc] init] autorelease];
+}
++ (Class)transformedValueClass { return [NSString class]; }
++ (BOOL)allowsReverseTransformation { return NO; }
+- (id)transformedValue:(id)value {
+	switch ([value intValue]) {
+		case BBOSCTypeInt: return @"Integer";
+		case BBOSCTypeFloat: return @"Float";
+		case BBOSCTypeBool: return @"Boolean";
+		case BBOSCTypeString: return @"String";
+		case BBOSCTypeArrayOfInt: return @"Array w/ Int bias";
+		case BBOSCTypeArrayOfFloat: return @"Array w/ Float bias";
+		case BBOSCTypeArrayOfBool: return @"Array w/ Bool bias";
+	}
+	NSAssert1(NO, @"Bad OSC type value %@", value);
+}
+@end
+
+@implementation BBOSCPlugInSenderViewController
+@synthesize portTypeDropDown, portArrayController;
+
+-(void)setPortTypeDropDown:(NSPopUpButton*)popup {
+	// Initialize the popup with all our port types
+	portTypeDropDown = popup;
+	[portTypeDropDown removeAllItems];
+	NSMutableArray* portTypes = [NSMutableArray array];
+	BBOSCTypeToStringTransformer* transformer = [BBOSCTypeToStringTransformer transformer];
+	for(int i=0; i<BBOSCTypeCount; i++) {
+		[portTypes addObject:[transformer transformedValue:[NSNumber numberWithInt:i]]];
+	}
+	[portTypeDropDown addItemsWithTitles:portTypes];
+}
+
+-(void)addNewPort:(id)sender {
+	NSMutableDictionary* newPort = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									[NSNumber numberWithInt:[portTypeDropDown indexOfSelectedItem]],BBOSCTypeKey,
+									[[NSProcessInfo processInfo] globallyUniqueString], BBOSCPortKey, nil
+									];
+	[portArrayController addObject:newPort];
+}
+
+@end
+
+
+
+@interface BBOSCPlugInSender ()
+@property (nonatomic, readwrite, retain) OSCManager *oscManager;
+@property (nonatomic, readwrite, retain) OSCOutPort *oscPort;
+@property (nonatomic, readwrite, retain) NSArray* oscParameters;
+
+@end
+
+@implementation BBOSCPlugInSender
+@synthesize oscManager, oscPort, oscParameters;
+@dynamic inputBroadcastPort, inputBroadcastPath;
+
++(void)initialize {
+	if (self == [BBOSCPlugInSender class]) {
+		[NSValueTransformer setValueTransformer:[BBOSCTypeToStringTransformer transformer] forName:@"BBOSCTypeToStringTransformer"];
+	}
+}
 
 + (NSDictionary*) attributes
 {
@@ -28,11 +143,15 @@
 	return [NSDictionary dictionaryWithObjectsAndKeys:kQCPlugIn_Name, QCPlugInAttributeNameKey, kQCPlugIn_Description, QCPlugInAttributeDescriptionKey, nil];
 }
 
-+ (NSDictionary*) attributesForPropertyPortWithKey:(NSString*)key
-{
-	/*
-	Specify the optional attributes for property based ports (QCPortAttributeNameKey, QCPortAttributeDefaultValueKey...).
-	*/
++ (NSDictionary*) attributesForPropertyPortWithKey:(NSString*)key {
+	if ([key isEqualToString:@"inputBroadcastPort"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Broadcast Port", QCPortAttributeNameKey,
+				[NSNumber numberWithInt:60000], QCPortAttributeDefaultValueKey, nil];
+	}
+	if ([key isEqualToString:@"inputBroadcastPath"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Broadcast Path", QCPortAttributeNameKey,
+				@"/test", QCPortAttributeDefaultValueKey, nil];
+	}
 	
 	return nil;
 }
@@ -61,7 +180,9 @@
 		/*
 		Allocate any permanent resource required by the plug-in.
 		*/
-		oscManager = [[OSCManager alloc] init];
+		self.oscManager = [[[OSCManager alloc] init] autorelease];
+
+		self.oscParameters = [NSArray array];
 	}
 	
 	return self;
@@ -83,6 +204,61 @@
 	[super dealloc];
 }
 
+- (QCPlugInViewController*) createViewController
+{
+	return [[BBOSCPlugInSenderViewController alloc] initWithPlugIn:self
+											  viewNibName:@"BBOSCSender"];
+}
+
++ (NSArray*) plugInKeys {
+	return [NSArray arrayWithObjects:@"oscParameters", nil];
+}
+
+-(void)setOscParameters:(NSArray*)params {
+	NSArray* originalPortKeys = [oscParameters map:^(id port){ return [port objectForKey:BBOSCPortKey]; }];
+	
+	[self willChangeValueForKey:@"oscParameters"];
+	[oscParameters release];
+	oscParameters = [params retain];
+	[self didChangeValueForKey:@"oscParameters"];
+	
+	// Bleh, just trash all the original input ports
+	for(NSString* portKey in originalPortKeys) {
+		[self removeInputPortForKey:portKey];
+	}
+	
+	for(NSDictionary* port in oscParameters) {
+		NSString* key = [port objectForKey:BBOSCPortKey];
+		NSNumber* oscType = [port objectForKey:BBOSCTypeKey];
+		NSString* qcType;
+		switch([oscType intValue]) {
+			case BBOSCTypeBool:
+				qcType = QCPortTypeBoolean;
+				break;
+			case BBOSCTypeInt:
+				qcType = QCPortTypeIndex;
+				break;
+			case BBOSCTypeFloat:
+				qcType = QCPortTypeNumber;
+				break;
+			case BBOSCTypeString:
+				qcType = QCPortTypeString;
+				break;
+			default:
+				qcType = QCPortTypeStructure;
+				break;
+		}
+		NSString* name = [NSString stringWithFormat:@"OSC-%@", [[BBOSCTypeToStringTransformer transformer] transformedValue:oscType]];
+		NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys:name, QCPortAttributeNameKey, nil];
+
+		[self addInputPortWithType:qcType forKey:key withAttributes:attributes];
+	}
+}
+
+-(NSArray*)oscParameters {
+	return oscParameters;
+}
+
 @end
 
 @implementation BBOSCPlugInSender (Execution)
@@ -92,8 +268,7 @@
 	/*
 	Called by Quartz Composer when rendering of the composition starts: perform any required setup for the plug-in.
 	Return NO in case of fatal failure (this will prevent rendering of the composition to start).
-	*/
-	oscPort = [[oscManager createNewOutputToAddress:@"127.0.0.1" atPort:60000 withLabel:@"BB OSC"] retain];
+	 */
 	
 	return YES;
 }
@@ -116,21 +291,39 @@
 	CGLContextObj cgl_ctx = [context CGLContextObj];
 	*/
 	
-	OSCMessage* message = [OSCMessage createWithAddress:@"/test"];
-	for(id object in self.inputStructure) {
-		if ([object isKindOfClass:[NSString class]])
-			[message addString:object];
-		else if ([object isKindOfClass:[NSNumber class]]) {
-			if (object==(id)kCFBooleanTrue)
-				[message addBOOL:YES];
-			else if (object==(id)kCFBooleanFalse)
-				[message addBOOL:NO];
-			else
-				[message addFloat:[object floatValue]];
-		} else
-			NSLog(@"Don't recognise %@", object);
+	BOOL inputsChanged = NO;
+	
+	if ([self didValueForInputKeyChange:@"inputBroadcastPort"]) {
+		if (self.oscPort)
+			[self.oscManager removeOutput:self.oscPort];
+		self.oscPort = [self.oscManager createNewOutputToAddress:@"0.0.0.0" atPort:self.inputBroadcastPort withLabel:@"BB OSC"];
+		inputsChanged = YES;
 	}
-	[oscPort sendThisMessage:message];
+
+	for(NSDictionary* port in oscParameters) {
+		NSString* key = [port objectForKey:BBOSCPortKey];
+		if ([self didValueForInputKeyChange:key]) {
+			inputsChanged = YES;
+			break;
+		}
+	}
+	if ([self didValueForInputKeyChange:@"inputBroadcastPath"])
+		inputsChanged = YES;
+	
+	if (!inputsChanged)
+		return YES;
+	
+	OSCMessage* message = [OSCMessage createWithAddress:self.inputBroadcastPath];
+	
+	for(NSDictionary* port in oscParameters) {
+		NSString* key = [port objectForKey:BBOSCPortKey];
+		id value = [self valueForInputKey:key];
+		BBOSCType oscType = [[port objectForKey:BBOSCTypeKey] intValue];
+		
+		[message addNSValue:value withBias:oscType];
+	}
+		
+	[self.oscPort sendThisMessage:message];
 	
 	return YES;
 }
@@ -147,9 +340,6 @@
 	/*
 	Called by Quartz Composer when rendering of the composition stops: perform any required cleanup for the plug-in.
 	*/
-	[oscManager removeOutput:oscPort];
-	[oscPort release];
-	oscPort = nil;
 }
 
 @end

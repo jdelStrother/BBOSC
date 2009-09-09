@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -28,6 +28,10 @@
 		FC5208D710567C0500FE3004 /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC5208D010567BED00FE3004 /* VVOSC.framework */; };
 		FC52092410567D0300FE3004 /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC5208D010567BED00FE3004 /* VVOSC.framework */; };
 		FC5209AC1056853800FE3004 /* BBOSCPluginReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = FC5209AB1056853800FE3004 /* BBOSCPluginReceiver.m */; };
+		FC520AD61056B6F200FE3004 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */; };
+		FC520AD91056B6FD00FE3004 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */; };
+		FC520B0A1056B90000FE3004 /* BBOSCSender.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC520AC11056B56400FE3004 /* BBOSCSender.xib */; };
+		FC520BFC1057E69B00FE3004 /* NSArrayExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520BFB1057E69B00FE3004 /* NSArrayExtensions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +93,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				FC520AD91056B6FD00FE3004 /* BWToolkitFramework.framework in CopyFiles */,
 				FC52092410567D0300FE3004 /* VVOSC.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +116,10 @@
 		FC52093910567D6200FE3004 /* Target-QCPlugin.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Target-QCPlugin.xcconfig"; path = "/Code/Config/Target-QCPlugin.xcconfig"; sourceTree = "<absolute>"; };
 		FC5209AA1056853800FE3004 /* BBOSCPluginReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBOSCPluginReceiver.h; sourceTree = "<group>"; };
 		FC5209AB1056853800FE3004 /* BBOSCPluginReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBOSCPluginReceiver.m; sourceTree = "<group>"; };
+		FC520AC11056B56400FE3004 /* BBOSCSender.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BBOSCSender.xib; sourceTree = "<group>"; };
+		FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = lib/BWToolkitFramework.framework; sourceTree = "<group>"; };
+		FC520BFA1057E69B00FE3004 /* NSArrayExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtensions.h; sourceTree = "<group>"; };
+		FC520BFB1057E69B00FE3004 /* NSArrayExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtensions.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +130,7 @@
 				FC5208D710567C0500FE3004 /* VVOSC.framework in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
 				16BA96310A7EB9AC001E4983 /* Quartz.framework in Frameworks */,
+				FC520AD61056B6F200FE3004 /* BWToolkitFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +154,7 @@
 		089C1671FE841209C02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */,
 				16BA96300A7EB9AC001E4983 /* Quartz.framework */,
 				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
 			);
@@ -154,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				8D5B49B7048680CD000E48DA /* Info.plist */,
+				FC520AC11056B56400FE3004 /* BBOSCSender.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -165,6 +177,8 @@
 				16BA95410A7EB2EB001E4983 /* BBOSCPlugInSender.m */,
 				FC5209AA1056853800FE3004 /* BBOSCPluginReceiver.h */,
 				FC5209AB1056853800FE3004 /* BBOSCPluginReceiver.m */,
+				FC520BFA1057E69B00FE3004 /* NSArrayExtensions.h */,
+				FC520BFB1057E69B00FE3004 /* NSArrayExtensions.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -219,6 +233,7 @@
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
 				FC52092A10567D0600FE3004 /* CopyFiles */,
+				FC520B241056B97100FE3004 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -237,7 +252,7 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "BBOSC" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* Quartz Composer Plug In */;
 			projectDirPath = "";
@@ -293,6 +308,17 @@
 		};
 /* End PBXReferenceProxy section */
 
+/* Begin PBXResourcesBuildPhase section */
+		FC520B241056B97100FE3004 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC520B0A1056B90000FE3004 /* BBOSCSender.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXShellScriptBuildPhase section */
 		233E2C690A83C783005A62DF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -316,6 +342,7 @@
 			files = (
 				16BA95420A7EB2EB001E4983 /* BBOSCPlugInSender.m in Sources */,
 				FC5209AC1056853800FE3004 /* BBOSCPluginReceiver.m in Sources */,
+				FC520BFC1057E69B00FE3004 /* NSArrayExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +367,10 @@
 			baseConfigurationReference = FC52093910567D6200FE3004 /* Target-QCPlugin.xcconfig */;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/lib\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_GC = supported;
@@ -360,6 +391,10 @@
 			baseConfigurationReference = FC52093910567D6200FE3004 /* Target-QCPlugin.xcconfig */;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/lib\"",
+				);
 				GCC_ENABLE_OBJC_GC = supported;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -380,8 +415,9 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -394,7 +430,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
