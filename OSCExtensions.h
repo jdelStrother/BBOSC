@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "vvosc/FrameworkSrc/VVOSC.h"
+#import <VVOSC/VVOSC.h>
 #import "BBOSCViewController.h"
 
 @interface OSCMessage(BBExtensions)

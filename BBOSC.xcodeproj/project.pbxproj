@@ -25,8 +25,6 @@
 		16BA95420A7EB2EB001E4983 /* BBOSCPlugInSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BA95410A7EB2EB001E4983 /* BBOSCPlugInSender.m */; };
 		16BA96310A7EB9AC001E4983 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16BA96300A7EB9AC001E4983 /* Quartz.framework */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
-		FC5208D710567C0500FE3004 /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC5208D010567BED00FE3004 /* VVOSC.framework */; };
-		FC52092410567D0300FE3004 /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC5208D010567BED00FE3004 /* VVOSC.framework */; };
 		FC5209AC1056853800FE3004 /* BBOSCPluginReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = FC5209AB1056853800FE3004 /* BBOSCPluginReceiver.m */; };
 		FC520AD61056B6F200FE3004 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */; };
 		FC520AD91056B6FD00FE3004 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC520AD51056B6F200FE3004 /* BWToolkitFramework.framework */; };
@@ -35,6 +33,9 @@
 		FC520CFB1058085100FE3004 /* BBOSCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520CFA1058085100FE3004 /* BBOSCViewController.m */; };
 		FC520D301058137600FE3004 /* OSCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520D2F1058137600FE3004 /* OSCExtensions.m */; };
 		FC520E8F1059234900FE3004 /* BBOSCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520E8E1059234900FE3004 /* BBOSCManager.m */; };
+		FC520F6B105936B000FE3004 /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC520F58105936A500FE3004 /* VVOSC.framework */; };
+		FC520F75105936CA00FE3004 /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC520F58105936A500FE3004 /* VVOSC.framework */; };
+		FCC290EA1059440700B73F44 /* VVBasics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FC520F52105936A500FE3004 /* VVBasics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,47 +46,110 @@
 			remoteGlobalIDString = 8D5B49AC048680CD000E48DA;
 			remoteInfo = BBOSC;
 		};
-		FC5208CD10567BED00FE3004 /* PBXContainerItemProxy */ = {
+		FC520F51105936A500FE3004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 963E71D00E993BB9007CF9D8;
-			remoteInfo = VVOSCTester;
+			remoteGlobalIDString = 961EA8ED100E8565007E6C25;
+			remoteInfo = VVBasics;
 		};
-		FC5208CF10567BED00FE3004 /* PBXContainerItemProxy */ = {
+		FC520F53105936A500FE3004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
-			remoteInfo = "VVOSC framework";
+			remoteGlobalIDString = 961745F4100F86B400FB60E6;
+			remoteInfo = VVMIDI;
 		};
-		FC5208D110567BED00FE3004 /* PBXContainerItemProxy */ = {
+		FC520F55105936A500FE3004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 96EB122C0EFAA64300B2D581;
-			remoteInfo = "VVOSC-iPhone sim";
+			remoteGlobalIDString = 9656D900100F89BA0064EEA6;
+			remoteInfo = MIDITestApp;
 		};
-		FC5208D310567BED00FE3004 /* PBXContainerItemProxy */ = {
+		FC520F57105936A500FE3004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 967FDE3C0EFAA6A600BCF87E;
-			remoteInfo = "VVOSC-iPhone dev";
+			remoteGlobalIDString = 9628D0C5100E89F700C3944E;
+			remoteInfo = VVOSC;
 		};
-		FC5208D510567BED00FE3004 /* PBXContainerItemProxy */ = {
+		FC520F59105936A500FE3004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 96A059B40EFACDDB00E82377;
-			remoteInfo = "VVOSC-os x";
+			remoteGlobalIDString = 9628D179100E8B4D00C3944E;
+			remoteInfo = OSCTestApp;
 		};
-		FC5208EC10567C6C00FE3004 /* PBXContainerItemProxy */ = {
+		FC520F5B105936A500FE3004 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9606B14D101761EF00CC50B7;
+			remoteInfo = VVFFGL;
+		};
+		FC520F5D105936A500FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9606B15C1017621200CC50B7;
+			remoteInfo = FFGLTestApp;
+		};
+		FC520F5F105936A500FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9628D0D9100E8A1600C3944E;
+			remoteInfo = "VVOSC-iPhone sim SDK";
+		};
+		FC520F61105936A500FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9628D0E2100E8A1F00C3944E;
+			remoteInfo = "VVOSC-iPhone dev SDK";
+		};
+		FC520F63105936A500FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9628D0EB100E8A2C00C3944E;
+			remoteInfo = "VVOSC-os x SDK";
+		};
+		FC520F65105936A500FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9666941210304C0500DB5FDF;
+			remoteInfo = "VVBasics-iPhone sim SDK";
+		};
+		FC520F67105936A500FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9666942710304C1F00DB5FDF;
+			remoteInfo = "VVBasics-iPhone dev SDK";
+		};
+		FC520F69105936A500FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9666943810304C2E00DB5FDF;
+			remoteInfo = "VVBasics-os x SDK";
+		};
+		FC520F6D105936BA00FE3004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
-			remoteInfo = "VVOSC framework";
+			remoteGlobalIDString = 9628D0C4100E89F700C3944E;
+			remoteInfo = VVOSC;
+		};
+		FCC290E6105943FF00B73F44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 961EA8EC100E8565007E6C25 /* VVBasics */;
+			remoteInfo = VVBasics;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -96,8 +160,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				FCC290EA1059440700B73F44 /* VVBasics.framework in CopyFiles */,
+				FC520F75105936CA00FE3004 /* VVOSC.framework in CopyFiles */,
 				FC520AD91056B6FD00FE3004 /* BWToolkitFramework.framework in CopyFiles */,
-				FC52092410567D0300FE3004 /* VVOSC.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +176,6 @@
 		16BA96300A7EB9AC001E4983 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		8D5B49B6048680CD000E48DA /* BBOSC.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BBOSC.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VVOSC.xcodeproj; path = vvosc/VVOSC.xcodeproj; sourceTree = "<group>"; };
 		FC52093510567D6200FE3004 /* Project-Base.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-Base.xcconfig"; path = "/Code/Config/Project-Base.xcconfig"; sourceTree = "<absolute>"; };
 		FC52093610567D6200FE3004 /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-Debug.xcconfig"; path = "/Code/Config/Project-Debug.xcconfig"; sourceTree = "<absolute>"; };
 		FC52093710567D6200FE3004 /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-Release.xcconfig"; path = "/Code/Config/Project-Release.xcconfig"; sourceTree = "<absolute>"; };
@@ -129,6 +193,7 @@
 		FC520D2F1058137600FE3004 /* OSCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSCExtensions.m; sourceTree = "<group>"; };
 		FC520E8D1059234900FE3004 /* BBOSCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBOSCManager.h; sourceTree = "<group>"; };
 		FC520E8E1059234900FE3004 /* BBOSCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBOSCManager.m; sourceTree = "<group>"; };
+		FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VVOpenSource.xcodeproj; path = lib/vvosc/VVOpenSource.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC5208D710567C0500FE3004 /* VVOSC.framework in Frameworks */,
+				FC520F6B105936B000FE3004 /* VVOSC.framework in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
 				16BA96310A7EB9AC001E4983 /* Quartz.framework in Frameworks */,
 				FC520AD61056B6F200FE3004 /* BWToolkitFramework.framework in Frameworks */,
@@ -149,8 +214,8 @@
 		089C166AFE841209C02AAC07 /* Quartz Composer Plug In */ = {
 			isa = PBXGroup;
 			children = (
+				FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */,
 				FC52093410567D4300FE3004 /* Build Config */,
-				FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				32C88E010371C26100C91783 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
@@ -214,18 +279,6 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
-		FC5208C010567BED00FE3004 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FC5208CE10567BED00FE3004 /* VVOSCTester.app */,
-				FC5208D010567BED00FE3004 /* VVOSC.framework */,
-				FC5208D210567BED00FE3004 /* libVVOSC.a */,
-				FC5208D410567BED00FE3004 /* libVVOSC.a */,
-				FC5208D610567BED00FE3004 /* libVVOSC.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		FC52093410567D4300FE3004 /* Build Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +289,26 @@
 				FC52093910567D6200FE3004 /* Target-QCPlugin.xcconfig */,
 			);
 			name = "Build Config";
+			sourceTree = "<group>";
+		};
+		FC520F3D105936A500FE3004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FC520F52105936A500FE3004 /* VVBasics.framework */,
+				FC520F54105936A500FE3004 /* VVMIDI.framework */,
+				FC520F56105936A500FE3004 /* MIDITestApp.app */,
+				FC520F58105936A500FE3004 /* VVOSC.framework */,
+				FC520F5A105936A500FE3004 /* OSCTestApp.app */,
+				FC520F5C105936A500FE3004 /* VVFFGL.framework */,
+				FC520F5E105936A500FE3004 /* FFGLTestApp.app */,
+				FC520F60105936A500FE3004 /* libVVOSC.a */,
+				FC520F62105936A500FE3004 /* libVVOSC.a */,
+				FC520F64105936A500FE3004 /* libVVOSC.a */,
+				FC520F66105936A500FE3004 /* libVVBasics.a */,
+				FC520F68105936A500FE3004 /* libVVBasics.a */,
+				FC520F6A105936A500FE3004 /* libVVBasics.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,7 +326,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				FC5208ED10567C6C00FE3004 /* PBXTargetDependency */,
+				FC520F6E105936BA00FE3004 /* PBXTargetDependency */,
+				FCC290E7105943FF00B73F44 /* PBXTargetDependency */,
 			);
 			name = BBOSC;
 			productInstallPath = "$(HOME)/Library/Bundles";
@@ -273,8 +347,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = FC5208C010567BED00FE3004 /* Products */;
-					ProjectRef = FC5208BF10567BED00FE3004 /* VVOSC.xcodeproj */;
+					ProductGroup = FC520F3D105936A500FE3004 /* Products */;
+					ProjectRef = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -286,39 +360,95 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		FC5208CE10567BED00FE3004 /* VVOSCTester.app */ = {
+		FC520F52105936A500FE3004 /* VVBasics.framework */ = {
 			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = VVOSCTester.app;
-			remoteRef = FC5208CD10567BED00FE3004 /* PBXContainerItemProxy */;
+			fileType = wrapper.framework;
+			path = VVBasics.framework;
+			remoteRef = FC520F51105936A500FE3004 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FC5208D010567BED00FE3004 /* VVOSC.framework */ = {
+		FC520F54105936A500FE3004 /* VVMIDI.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = VVMIDI.framework;
+			remoteRef = FC520F53105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F56105936A500FE3004 /* MIDITestApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = MIDITestApp.app;
+			remoteRef = FC520F55105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F58105936A500FE3004 /* VVOSC.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = VVOSC.framework;
-			remoteRef = FC5208CF10567BED00FE3004 /* PBXContainerItemProxy */;
+			remoteRef = FC520F57105936A500FE3004 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FC5208D210567BED00FE3004 /* libVVOSC.a */ = {
+		FC520F5A105936A500FE3004 /* OSCTestApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = OSCTestApp.app;
+			remoteRef = FC520F59105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F5C105936A500FE3004 /* VVFFGL.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = VVFFGL.framework;
+			remoteRef = FC520F5B105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F5E105936A500FE3004 /* FFGLTestApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = FFGLTestApp.app;
+			remoteRef = FC520F5D105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F60105936A500FE3004 /* libVVOSC.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libVVOSC.a;
-			remoteRef = FC5208D110567BED00FE3004 /* PBXContainerItemProxy */;
+			remoteRef = FC520F5F105936A500FE3004 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FC5208D410567BED00FE3004 /* libVVOSC.a */ = {
+		FC520F62105936A500FE3004 /* libVVOSC.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libVVOSC.a;
-			remoteRef = FC5208D310567BED00FE3004 /* PBXContainerItemProxy */;
+			remoteRef = FC520F61105936A500FE3004 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FC5208D610567BED00FE3004 /* libVVOSC.a */ = {
+		FC520F64105936A500FE3004 /* libVVOSC.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libVVOSC.a;
-			remoteRef = FC5208D510567BED00FE3004 /* PBXContainerItemProxy */;
+			remoteRef = FC520F63105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F66105936A500FE3004 /* libVVBasics.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libVVBasics.a;
+			remoteRef = FC520F65105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F68105936A500FE3004 /* libVVBasics.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libVVBasics.a;
+			remoteRef = FC520F67105936A500FE3004 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FC520F6A105936A500FE3004 /* libVVBasics.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libVVBasics.a;
+			remoteRef = FC520F69105936A500FE3004 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -372,10 +502,15 @@
 			target = 8D5B49AC048680CD000E48DA /* BBOSC */;
 			targetProxy = 233E2C650A83C76D005A62DF /* PBXContainerItemProxy */;
 		};
-		FC5208ED10567C6C00FE3004 /* PBXTargetDependency */ = {
+		FC520F6E105936BA00FE3004 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "VVOSC framework";
-			targetProxy = FC5208EC10567C6C00FE3004 /* PBXContainerItemProxy */;
+			name = VVOSC;
+			targetProxy = FC520F6D105936BA00FE3004 /* PBXContainerItemProxy */;
+		};
+		FCC290E7105943FF00B73F44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VVBasics;
+			targetProxy = FCC290E6105943FF00B73F44 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -388,6 +523,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/lib\"",
+					"\"$(SRCROOT)/lib/vvosc/build/$(CONFIGURATION)\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -412,6 +548,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/lib\"",
+					"\"$(SRCROOT)/lib/vvosc/build/$(CONFIGURATION)\"",
 				);
 				GCC_ENABLE_OBJC_GC = supported;
 				GCC_MODEL_TUNING = G5;
