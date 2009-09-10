@@ -8,21 +8,29 @@
 
 #import "BBOSCManager.h"
 #import "OSCExtensions.h"
+#import "NSArrayExtensions.h"
 
 @interface BBOSCBroadcastPort : NSObject {
-OSCManager* oscManager;
+	OSCManager* oscManager;
+	int port;
 }
--(id)initWithManager:(OSCManager*)manager;
+-(id)initWithManager:(OSCManager*)manager atPort:(int)p;
 @end
 @implementation BBOSCBroadcastPort
--(id)initWithManager:(OSCManager*)manager {
+-(id)initWithManager:(OSCManager*)manager atPort:(int)p {
 	if (self = [super init]) {
 		oscManager = manager;
+		port = p;
 	}
 	return self;
 }
 -(void)sendThisMessage:(OSCMessage*)message {
-	[[oscManager outPortArray] makeObjectsPerformSelector:@selector(sendThisMessage:) withObject:message];
+	// Broadcast to all discovered outPorts with the same port number as us.
+	[[oscManager outPortArray] rdlock];
+	NSArray* suitablePorts = [[[oscManager outPortArray] array] select:^BOOL(OSCOutPort* oscPort){return (oscPort.port == port);}];
+	[[oscManager outPortArray] unlock];
+	[suitablePorts makeObjectsPerformSelector:@selector(sendThisMessage:) withObject:message];
+
 }
 @end
 
@@ -66,7 +74,7 @@ static id sharedManager=nil;
 }
 - (OSCOutPort *) createNewOutputToAddress:(NSString *)a atPort:(int)p withLabel:(NSString *)l {
 	if ([a isEqualToString:@"0.0.0.0"])	// Broadcast to everyone
-		return [[[BBOSCBroadcastPort alloc] initWithManager:oscManager] autorelease];
+		return [[[BBOSCBroadcastPort alloc] initWithManager:oscManager atPort:p] autorelease];
 	return [oscManager createNewOutputToAddress:a atPort:p withLabel:l];
 }
 - (void) removeInput:(id)p {
