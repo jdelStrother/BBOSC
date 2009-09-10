@@ -24,7 +24,7 @@
 @end
 
 @implementation BBOSCPluginReceiver
-@dynamic inputReceivingPort, inputReceivingPath, outputMessageReceived, outputMessagePath;
+@dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, outputMessageReceived, outputMessagePath;
 @synthesize oscPort, oscParameters, listeningPath;
 
 + (NSDictionary*) attributes
@@ -44,6 +44,10 @@
 	if ([key isEqualToString:@"inputReceivingPort"]) {
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Receiving Port", QCPortAttributeNameKey,
 				[NSNumber numberWithInt:60000], QCPortAttributeDefaultValueKey, nil];
+	}
+	if ([key isEqualToString:@"inputDiscardExcessMessages"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Discard Excess Messages", QCPortAttributeNameKey,
+				[NSNumber numberWithBool:NO], QCPortAttributeDefaultValueKey, nil];
 	}
 	if ([key isEqualToString:@"inputReceivingPath"]) {
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Receiving Path", QCPortAttributeNameKey,
@@ -216,7 +220,12 @@
 		
 		self.outputMessagePath = [message address];
 
-		[messages removeObjectAtIndex:0];
+		// If we want to be super-responsive, trash any extra messages that are received that we didn't get around to processing this frame
+		// If we want to catch every single message, leave them in a queue to be processed in a later frame.
+		if (self.inputDiscardExcessMessages)
+			[messages removeAllObjects];
+		else
+			[messages removeObjectAtIndex:0];
 	}
 	[messageLock unlock];
 	

@@ -19,6 +19,7 @@
 
 @property (nonatomic, readonly, retain) OSCInPort *oscPort;  
 
+@property (nonatomic, readwrite, assign) BOOL inputDiscardExcessMessages;
 @property (nonatomic, readwrite, assign) NSUInteger inputReceivingPort;
 @property (nonatomic, readwrite, assign) NSString* inputReceivingPath;
 @property (nonatomic, readwrite, assign) BOOL outputMessageReceived;
