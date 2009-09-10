@@ -24,7 +24,7 @@
 @end
 
 @implementation BBOSCPluginReceiver
-@dynamic inputReceivingPort, inputReceivingPath, outputMessageReceived;
+@dynamic inputReceivingPort, inputReceivingPath, outputMessageReceived, outputMessagePath;
 @synthesize oscManager, oscPort, oscParameters, listeningPath;
 
 + (NSDictionary*) attributes
@@ -213,6 +213,8 @@
 			
 			[self setValue:outputValue forOutputKey:portKey];
 		}
+		
+		self.outputMessagePath = [message address];
 
 		[messages removeObjectAtIndex:0];
 	}

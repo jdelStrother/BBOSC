@@ -23,4 +23,5 @@
 @property (nonatomic, readwrite, assign) NSUInteger inputReceivingPort;
 @property (nonatomic, readwrite, assign) NSString* inputReceivingPath;
 @property (nonatomic, readwrite, assign) BOOL outputMessageReceived;
+@property (nonatomic, readwrite, assign) NSString* outputMessagePath;
 @end
