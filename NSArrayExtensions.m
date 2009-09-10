@@ -38,7 +38,7 @@
 	int i=0;
 	NSMutableDictionary* result = [NSMutableDictionary dictionary];
 	for(id object in self) {
-		[result setObject:object forKey:[NSNumber numberWithInt:i++]];
+		[result setObject:object forKey:[NSString stringWithFormat:@"%d", i++]];
 	}
 	return result;
 }
