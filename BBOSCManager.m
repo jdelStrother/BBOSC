@@ -9,6 +9,22 @@
 #import "BBOSCManager.h"
 #import "OSCExtensions.h"
 
+@interface BBOSCBroadcastPort : NSObject {
+OSCManager* oscManager;
+}
+-(id)initWithManager:(OSCManager*)manager;
+@end
+@implementation BBOSCBroadcastPort
+-(id)initWithManager:(OSCManager*)manager {
+	if (self = [super init]) {
+		oscManager = manager;
+	}
+	return self;
+}
+-(void)sendThisMessage:(OSCMessage*)message {
+	[[oscManager outPortArray] makeObjectsPerformSelector:@selector(sendThisMessage:) withObject:message];
+}
+@end
 
 @implementation BBOSCManager
 
@@ -49,6 +65,8 @@ static id sharedManager=nil;
 	return [oscManager createNewInputForPort:p withLabel:l];
 }
 - (OSCOutPort *) createNewOutputToAddress:(NSString *)a atPort:(int)p withLabel:(NSString *)l {
+	if ([a isEqualToString:@"0.0.0.0"])	// Broadcast to everyone
+		return [[[BBOSCBroadcastPort alloc] initWithManager:oscManager] autorelease];
 	return [oscManager createNewOutputToAddress:a atPort:p withLabel:l];
 }
 - (void) removeInput:(id)p {
