@@ -12,7 +12,6 @@
 @interface BBOSCPlugInSender : QCPlugIn {
 
 }
-@property (nonatomic, readonly, retain) OSCManager *oscManager;
 @property (nonatomic, readonly, retain) OSCOutPort *oscPort;
 @property (nonatomic, readonly, retain) NSArray* oscParameters;
 

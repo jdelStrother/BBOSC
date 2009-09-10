@@ -34,6 +34,7 @@
 		FC520BFC1057E69B00FE3004 /* NSArrayExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520BFB1057E69B00FE3004 /* NSArrayExtensions.m */; };
 		FC520CFB1058085100FE3004 /* BBOSCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520CFA1058085100FE3004 /* BBOSCViewController.m */; };
 		FC520D301058137600FE3004 /* OSCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520D2F1058137600FE3004 /* OSCExtensions.m */; };
+		FC520E8F1059234900FE3004 /* BBOSCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FC520E8E1059234900FE3004 /* BBOSCManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +127,8 @@
 		FC520CFA1058085100FE3004 /* BBOSCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBOSCViewController.m; sourceTree = "<group>"; };
 		FC520D2E1058137600FE3004 /* OSCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCExtensions.h; sourceTree = "<group>"; };
 		FC520D2F1058137600FE3004 /* OSCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSCExtensions.m; sourceTree = "<group>"; };
+		FC520E8D1059234900FE3004 /* BBOSCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBOSCManager.h; sourceTree = "<group>"; };
+		FC520E8E1059234900FE3004 /* BBOSCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBOSCManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +192,8 @@
 				FC520CFA1058085100FE3004 /* BBOSCViewController.m */,
 				FC520D2E1058137600FE3004 /* OSCExtensions.h */,
 				FC520D2F1058137600FE3004 /* OSCExtensions.m */,
+				FC520E8D1059234900FE3004 /* BBOSCManager.h */,
+				FC520E8E1059234900FE3004 /* BBOSCManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -355,6 +360,7 @@
 				FC520BFC1057E69B00FE3004 /* NSArrayExtensions.m in Sources */,
 				FC520CFB1058085100FE3004 /* BBOSCViewController.m in Sources */,
 				FC520D301058137600FE3004 /* OSCExtensions.m in Sources */,
+				FC520E8F1059234900FE3004 /* BBOSCManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

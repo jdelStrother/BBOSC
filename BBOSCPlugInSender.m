@@ -12,19 +12,18 @@
 #import "BBOSCViewController.h"
 #import "BBOSCPlugInSender.h"
 #import "NSArrayExtensions.h"
-
+#import "BBOSCManager.h"
 #define	kQCPlugIn_Name				@"BBOSC Sender"
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control sender plugin"
 
 
 @interface BBOSCPlugInSender ()
-@property (nonatomic, readwrite, retain) OSCManager *oscManager;
 @property (nonatomic, readwrite, retain) OSCOutPort *oscPort;
 @property (nonatomic, readwrite, retain) NSArray* oscParameters;
 @end
 
 @implementation BBOSCPlugInSender
-@synthesize oscManager, oscPort, oscParameters;
+@synthesize oscPort, oscParameters;
 @dynamic inputBroadcastPort, inputBroadcastPath;
 
 + (NSDictionary*) attributes
@@ -73,8 +72,6 @@
 		/*
 		Allocate any permanent resource required by the plug-in.
 		*/
-		self.oscManager = [[[OSCManager alloc] init] autorelease];
-
 		self.oscParameters = [NSArray array];
 	}
 	
@@ -93,7 +90,6 @@
 - (void) dealloc
 {
 	[oscPort release];
-	[oscManager release];
 	[super dealloc];
 }
 
@@ -166,8 +162,10 @@
 	
 	if ([self didValueForInputKeyChange:@"inputBroadcastPort"]) {
 		if (self.oscPort)
-			[self.oscManager removeOutput:self.oscPort];
-		self.oscPort = [self.oscManager createNewOutputToAddress:@"0.0.0.0" atPort:self.inputBroadcastPort withLabel:@"BB OSC"];
+			[[BBOSCManager sharedManager] removeOutput:self.oscPort];
+		self.oscPort = [[BBOSCManager sharedManager] createNewOutputToAddress:@"0.0.0.0" atPort:self.inputBroadcastPort withLabel:@"BB OSC"];
+		if (!self.oscPort)
+			NSLog(@"Failed to created output port");
 		inputsChanged = YES;
 	}
 
@@ -202,7 +200,7 @@
 - (void) disableExecution:(id<QCPlugInContext>)context
 {
 	if (self.oscPort) {
-		[self.oscManager removeOutput:self.oscPort];
+		[[BBOSCManager sharedManager] removeOutput:self.oscPort];
 		self.oscPort = nil;
 	}
 }

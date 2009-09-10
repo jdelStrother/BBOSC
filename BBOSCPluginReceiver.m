@@ -12,12 +12,12 @@
 #import "BBOSCViewController.h"
 #import "NSArrayExtensions.h"
 #import "OSCExtensions.h"
+#import "BBOSCManager.h"
 
 #define	kQCPlugIn_Name				@"BBOSC Receiver"
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control receiver plugin"
 
 @interface BBOSCPluginReceiver ()
-@property (nonatomic, readwrite, retain) OSCManager *oscManager;
 @property (nonatomic, readwrite, retain) OSCOutPort *oscPort;
 @property (nonatomic, readwrite, retain) NSArray* oscParameters;
 @property (nonatomic, readwrite, retain) NSString* listeningPath;
@@ -25,7 +25,7 @@
 
 @implementation BBOSCPluginReceiver
 @dynamic inputReceivingPort, inputReceivingPath, outputMessageReceived, outputMessagePath;
-@synthesize oscManager, oscPort, oscParameters, listeningPath;
+@synthesize oscPort, oscParameters, listeningPath;
 
 + (NSDictionary*) attributes
 {
@@ -77,8 +77,7 @@
 - (id) init
 {
 	if(self = [super init]) {
-		self.oscManager = [[[OSCManager alloc] init] autorelease];
-		self.oscManager.delegate = self;
+		[[BBOSCManager sharedManager] addDelegate:self];
 		self.oscParameters = [NSArray array];
 		messages = [[NSMutableArray alloc] init];
 		messageLock = [[NSLock alloc] init];		
@@ -98,9 +97,8 @@
 
 - (void) dealloc
 {
+	[[BBOSCManager sharedManager] removeDelegate:self];
 	[oscPort release];
-	oscManager.delegate = nil;
-	[oscManager release];
 	[messages release];
 	[messageLock release];
 	[listeningPath release];
@@ -182,8 +180,10 @@
 	
 	if ([self didValueForInputKeyChange:@"inputReceivingPort"]) {
 		if (self.oscPort)
-			[self.oscManager removeInput:self.oscPort];
-		self.oscPort = [self.oscManager createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
+			[[BBOSCManager sharedManager] removeInput:self.oscPort];
+		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
+		if (!self.oscPort)
+			NSLog(@"Failed to created input port");
 	}
 	
 	if ([self didValueForInputKeyChange:@"inputReceivingPath"]) {
@@ -226,19 +226,13 @@
 - (void) disableExecution:(id<QCPlugInContext>)context
 {
 	if (self.oscPort) {
-		[self.oscManager removeOutput:self.oscPort];
+		[[BBOSCManager sharedManager] removeOutput:self.oscPort];
 		self.oscPort = nil;
 	}
 }
 
-- (void) stopExecution:(id<QCPlugInContext>)context
-{
-	/*
-	Called by Quartz Composer when rendering of the composition stops: perform any required cleanup for the plug-in.
-	*/
-	[oscManager removeOutput:oscPort];
-	[oscPort release];
-	oscPort = nil;
+- (void) stopExecution:(id<QCPlugInContext>)context {
+
 }
 
 @end
