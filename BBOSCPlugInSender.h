@@ -15,6 +15,7 @@
 @property (nonatomic, readonly, retain) OSCOutPort *oscPort;
 @property (nonatomic, readonly, retain) NSArray* oscParameters;
 
+@property (nonatomic, readwrite, assign) NSString* inputBroadcastAddress;
 @property (nonatomic, readwrite, assign) NSUInteger inputBroadcastPort;
 @property (nonatomic, readwrite, assign) NSString* inputBroadcastPath;
 

@@ -24,7 +24,7 @@
 
 @implementation BBOSCPlugInSender
 @synthesize oscPort, oscParameters;
-@dynamic inputBroadcastPort, inputBroadcastPath;
+@dynamic inputBroadcastPort, inputBroadcastPath, inputBroadcastAddress;
 
 + (NSDictionary*) attributes
 {
@@ -36,6 +36,10 @@
 }
 
 + (NSDictionary*) attributesForPropertyPortWithKey:(NSString*)key {
+	if ([key isEqualToString:@"inputBroadcastAddress"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Broadcast Address", QCPortAttributeNameKey,
+				@"0.0.0.0", QCPortAttributeDefaultValueKey, nil];
+	}
 	if ([key isEqualToString:@"inputBroadcastPort"]) {
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Broadcast Port", QCPortAttributeNameKey,
 				[NSNumber numberWithInt:60000], QCPortAttributeDefaultValueKey, nil];
@@ -160,10 +164,10 @@
 	
 	BOOL inputsChanged = NO;
 	
-	if ([self didValueForInputKeyChange:@"inputBroadcastPort"]) {
+	if ([self didValueForInputKeyChange:@"inputBroadcastAddress"] || [self didValueForInputKeyChange:@"inputBroadcastPort"]) {
 		if (self.oscPort)
 			[[BBOSCManager sharedManager] removeOutput:self.oscPort];
-		self.oscPort = [[BBOSCManager sharedManager] createNewOutputToAddress:@"0.0.0.0" atPort:self.inputBroadcastPort withLabel:@"BB OSC"];
+		self.oscPort = [[BBOSCManager sharedManager] createNewOutputToAddress:self.inputBroadcastAddress atPort:self.inputBroadcastPort withLabel:@"BB OSC"];
 		if (!self.oscPort)
 			NSLog(@"Failed to created output port");
 		inputsChanged = YES;
