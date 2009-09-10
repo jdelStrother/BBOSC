@@ -12,7 +12,8 @@
 
 @interface BBOSCBroadcastPort : NSObject {
 	OSCManager* oscManager;
-	int port;
+	int portNumber;
+	OSCOutPort* localPort;
 }
 -(id)initWithManager:(OSCManager*)manager atPort:(int)p;
 @end
@@ -20,14 +21,21 @@
 -(id)initWithManager:(OSCManager*)manager atPort:(int)p {
 	if (self = [super init]) {
 		oscManager = manager;
-		port = p;
+		portNumber = p;
+		// Make sure that the OSC Manager knows we can broadcast to ourselves
+		localPort = [[oscManager createNewOutputToAddress:@"127.0.0.1" atPort:p] retain];
 	}
 	return self;
+}
+-(void)dealloc {
+	[oscManager removeOutput:localPort];
+	[localPort release];
+	[super dealloc];
 }
 -(void)sendThisMessage:(OSCMessage*)message {
 	// Broadcast to all discovered outPorts with the same port number as us.
 	[[oscManager outPortArray] rdlock];
-	NSArray* suitablePorts = [[[oscManager outPortArray] array] select:^BOOL(OSCOutPort* oscPort){return (oscPort.port == port);}];
+	NSArray* suitablePorts = [[[oscManager outPortArray] array] select:^BOOL(OSCOutPort* oscPort){return (oscPort.port == portNumber);}];
 	[[oscManager outPortArray] unlock];
 	[suitablePorts makeObjectsPerformSelector:@selector(sendThisMessage:) withObject:message];
 
