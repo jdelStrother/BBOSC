@@ -65,6 +65,8 @@
 		oscValue = [self valueAtIndex:*pos];
 	(*pos)++;
 	
+	if ([oscValue type] == OSCValNil)
+		return [NSNull null];
 	switch (bias) {
 		case BBOSCTypeBool:
 			outputValue = [NSNumber numberWithBool:[oscValue boolValue]];
