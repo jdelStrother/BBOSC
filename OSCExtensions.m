@@ -41,20 +41,18 @@
 	}
 }
 
--(id)readNSValueFromPosition:(NSUInteger*)pos withBias:(BBOSCType)bias {
+-(id)readNSValueFromPosition:(NSUInteger*)pos withBias:(BBOSCType)bias forceType:(BOOL)forceType{
 	
 	if (bias >= BBOSCTypeArrayOfInt) {
 		NSMutableArray* result = [NSMutableArray array];
 		while(*pos<self.valueCount) {
-			id subvalue = [self readNSValueFromPosition:pos withBias:bias-4];
+			id subvalue = [self readNSValueFromPosition:pos withBias:bias-4 forceType:NO];	// Treat the arrays as loosely typed so strings don't get mangled
 			if (!subvalue)
 				break;
 			[result addObject:subvalue];
 		}
 		return result;
 	}
-	
-	id outputValue = nil;
 	
 	OSCValue* oscValue;
 	if (*pos >= self.valueCount)
@@ -67,20 +65,44 @@
 	
 	if ([oscValue type] == OSCValNil)
 		return [NSNull null];
-	switch (bias) {
-		case BBOSCTypeBool:
-			outputValue = [NSNumber numberWithBool:[oscValue boolValue]];
-			break;
-		case BBOSCTypeInt:
-			outputValue = [NSNumber numberWithInt:[oscValue intValue]];
-			break;
-		case BBOSCTypeFloat:
-			outputValue = [NSNumber numberWithFloat:[oscValue floatValue]];
-			break;
-		case BBOSCTypeString:
-			outputValue = [oscValue stringValue];
-			break;
+				
+	id outputValue = nil;	
+	if (forceType) {	// Use the 'bias' type, assume the user knows what he's doing.
+		switch (bias) {
+			case BBOSCTypeBool:
+				outputValue = [NSNumber numberWithBool:[oscValue boolValue]];
+				break;
+			case BBOSCTypeInt:
+				outputValue = [NSNumber numberWithInt:[oscValue intValue]];
+				break;
+			case BBOSCTypeFloat:
+				outputValue = [NSNumber numberWithFloat:[oscValue floatValue]];
+				break;
+			case BBOSCTypeString:
+				outputValue = [oscValue stringValue];
+				break;
+		}
+	} else {	// Use the OSC type
+		switch([oscValue type]) {
+			case OSCValBool:
+				outputValue = [NSNumber numberWithBool:[oscValue boolValue]];
+				break;
+			case OSCValInt:
+				outputValue = [NSNumber numberWithInt:[oscValue intValue]];
+				break;
+			case OSCValFloat:
+				outputValue = [NSNumber numberWithFloat:[oscValue floatValue]];
+				break;
+			case OSCValString:
+				outputValue = [oscValue stringValue];
+				break;
+		}
 	}
+	
 	return outputValue;
+}
+
+-(id)readNSValueFromPosition:(NSUInteger*)pos withBias:(BBOSCType)bias {
+	return [self readNSValueFromPosition:pos withBias:bias forceType:YES];
 }
 @end
