@@ -84,7 +84,8 @@
 		[[BBOSCManager sharedManager] addDelegate:self];
 		self.oscParameters = [NSArray array];
 		messages = [[NSMutableArray alloc] init];
-		messageLock = [[NSLock alloc] init];		
+		messageLock = [[NSLock alloc] init];
+		listeningPath = @"";
 	}
 	
 	return self;
@@ -182,19 +183,19 @@
 	CGLContextObj cgl_ctx = [context CGLContextObj];
 	*/
 	
+	if ([self didValueForInputKeyChange:@"inputReceivingPath"]) {
+		[messageLock lock];
+		self.listeningPath = self.inputReceivingPath;
+		[messages removeAllObjects];
+		[messageLock unlock];
+	}
+	
 	if ([self didValueForInputKeyChange:@"inputReceivingPort"]) {
 		if (self.oscPort)
 			[[BBOSCManager sharedManager] removeInput:self.oscPort];
 		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
 		if (!self.oscPort)
 			NSLog(@"Failed to created input port");
-	}
-	
-	if ([self didValueForInputKeyChange:@"inputReceivingPath"]) {
-		[messageLock lock];
-		self.listeningPath = self.inputReceivingPath;
-		[messages removeAllObjects];
-		[messageLock unlock];
 	}
 	
 	[messageLock lock];
