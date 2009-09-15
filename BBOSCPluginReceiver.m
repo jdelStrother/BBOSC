@@ -196,8 +196,12 @@
 	}
 	
 	if ([self didValueForInputKeyChange:@"inputReceivingPort"]||[self didValueForInputKeyChange:@"inputLabel"]) {
-		if (self.oscPort)
+		if (self.oscPort) {
+			NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];	// OSC only closes the socket once the port gets dealloced - be careful to force it to release as soon as possible
 			[[BBOSCManager sharedManager] removeInput:self.oscPort];
+			self.oscPort = nil;
+			[pool release];
+		}
 		
 		NSString* label = self.inputLabel;
 		if (![label length])
