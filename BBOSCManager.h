@@ -10,13 +10,9 @@
 
 @class OSCManager, OSCInPort, OSCOutPort;
 @interface BBOSCManager : NSObject {
-	NSMutableArray* delegates;
 	OSCManager* oscManager;
-	NSLock* delegateLock;
 }
 +(id)sharedManager;
--(void)addDelegate:(id)delegate;
--(void)removeDelegate:(id)delegate;
 
 - (OSCInPort*)createNewInputForPort:(int)p withLabel:(NSString *)l;
 - (OSCOutPort*)createNewOutputToAddress:(NSString *)a atPort:(int)p withLabel:(NSString *)l;

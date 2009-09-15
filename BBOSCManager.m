@@ -54,27 +54,8 @@ static id sharedManager=nil;
 	if (self = [super init]) {
 		oscManager = [[OSCManager alloc] init];
 		oscManager.delegate = self;
-		delegates = [[NSMutableArray alloc] init];
-		delegateLock = [[NSLock alloc] init];
 	}
 	return self;
-}
-
--(void)addDelegate:(id)delegate {
-	[delegateLock lock];
-	[delegates addObject:delegate];
-	[delegateLock unlock];
-}
--(void)removeDelegate:(id)delegate {
-	[delegateLock lock];
-	[delegates removeObject:delegate];
-	[delegateLock unlock];
-}
-
-- (void) receivedOSCMessage:(OSCMessage *)m {
-	[delegateLock lock];
-	[delegates makeObjectsPerformSelector:@selector(receivedOSCMessage:) withObject:m];
-	[delegateLock unlock];
 }
 
 - (OSCInPort *) createNewInputForPort:(int)p withLabel:(NSString *)l {

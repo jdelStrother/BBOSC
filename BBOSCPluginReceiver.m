@@ -81,7 +81,6 @@
 - (id) init
 {
 	if(self = [super init]) {
-		[[BBOSCManager sharedManager] addDelegate:self];
 		self.oscParameters = [NSArray array];
 		messages = [[NSMutableArray alloc] init];
 		messageLock = [[NSLock alloc] init];
@@ -102,7 +101,6 @@
 
 - (void) dealloc
 {
-	[[BBOSCManager sharedManager] removeDelegate:self];
 	[oscPort release];
 	[messages release];
 	[messageLock release];
@@ -194,6 +192,7 @@
 		if (self.oscPort)
 			[[BBOSCManager sharedManager] removeInput:self.oscPort];
 		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
+		self.oscPort.delegate = self;
 		if (!self.oscPort)
 			NSLog(@"Failed to created input port");
 	}
