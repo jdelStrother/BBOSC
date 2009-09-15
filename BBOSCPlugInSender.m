@@ -169,7 +169,7 @@
 			[[BBOSCManager sharedManager] removeOutput:self.oscPort];
 		self.oscPort = [[BBOSCManager sharedManager] createNewOutputToAddress:self.inputBroadcastAddress atPort:self.inputBroadcastPort withLabel:@"BB OSC"];
 		if (!self.oscPort)
-			NSLog(@"Failed to created output port");
+			NSLog(@"Failed to create output port");
 		inputsChanged = YES;
 	}
 

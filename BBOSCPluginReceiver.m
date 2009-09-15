@@ -24,7 +24,7 @@
 @end
 
 @implementation BBOSCPluginReceiver
-@dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, outputMessageReceived, outputMessagePath;
+@dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, outputError, outputMessageReceived, outputMessagePath;
 @synthesize oscPort, oscParameters, listeningPath;
 
 + (NSDictionary*) attributes
@@ -55,6 +55,9 @@
 	}
 	if ([key isEqualToString:@"outputMessageReceived"]) {
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Message Received", QCPortAttributeNameKey, nil];
+	}
+	if ([key isEqualToString:@"outputError"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Port Error", QCPortAttributeNameKey, nil];
 	}
 	
 	return nil;
@@ -194,7 +197,8 @@
 		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
 		self.oscPort.delegate = self;
 		if (!self.oscPort)
-			NSLog(@"Failed to created input port");
+			NSLog(@"Failed to create input port");
+		self.outputError = !self.oscPort;
 	}
 	
 	[messageLock lock];
