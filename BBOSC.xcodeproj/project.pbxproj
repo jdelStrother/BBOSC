@@ -148,7 +148,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = FC520F3C105936A500FE3004 /* VVOpenSource.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 961EA8EC100E8565007E6C25 /* VVBasics */;
+			remoteGlobalIDString = 961EA8EC100E8565007E6C25;
 			remoteInfo = VVBasics;
 		};
 /* End PBXContainerItemProxy section */

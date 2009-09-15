@@ -54,12 +54,27 @@ static id sharedManager=nil;
 	if (self = [super init]) {
 		oscManager = [[OSCManager alloc] init];
 		oscManager.delegate = self;
+		inputPorts = [[NSCountedSet alloc] init];
 	}
 	return self;
 }
 
 - (OSCInPort *) createNewInputForPort:(int)p withLabel:(NSString *)l {
-	return [oscManager createNewInputForPort:p withLabel:l];
+	// Search for any existing oscPorts with the same port number, and re-use them when possible
+	OSCInPort* resultingPort = nil;
+	for(OSCInPort* oscPort in inputPorts) {
+		if (oscPort.port == p) {
+			NSAssert([oscPort.portLabel isEqualToString:l], @"Need to be using the same label");
+			resultingPort = oscPort;
+			break;
+		}
+	}
+	if (!resultingPort)
+		resultingPort = [oscManager createNewInputForPort:p withLabel:l];
+
+	[inputPorts addObject:resultingPort];
+	
+	return resultingPort;
 }
 - (OSCOutPort *) createNewOutputToAddress:(NSString *)a atPort:(int)p withLabel:(NSString *)l {
 	if ([a isEqualToString:@"0.0.0.0"])	// Broadcast to everyone
@@ -67,7 +82,10 @@ static id sharedManager=nil;
 	return [oscManager createNewOutputToAddress:a atPort:p withLabel:l];
 }
 - (void) removeInput:(id)p {
-	[oscManager removeInput:p];
+	[inputPorts removeObject:p];
+	// Once noone is using that input any more, remove it from the oscManager.
+	if ([inputPorts countForObject:p] == 0)
+		[oscManager removeInput:p];
 }
 - (void) removeOutput:(id)p {
 	[oscManager removeOutput:p];

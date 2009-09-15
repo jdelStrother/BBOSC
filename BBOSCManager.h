@@ -11,6 +11,8 @@
 @class OSCManager, OSCInPort, OSCOutPort;
 @interface BBOSCManager : NSObject {
 	OSCManager* oscManager;
+	
+	NSCountedSet* inputPorts;
 }
 +(id)sharedManager;
 
