@@ -24,7 +24,7 @@
 @end
 
 @implementation BBOSCPluginReceiver
-@dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, outputError, outputMessageReceived, outputMessagePath;
+@dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, inputLabel, outputError, outputMessageReceived, outputMessagePath;
 @synthesize oscPort, oscParameters, listeningPath;
 
 + (NSDictionary*) attributes
@@ -51,6 +51,10 @@
 	}
 	if ([key isEqualToString:@"inputReceivingPath"]) {
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Receiving Path", QCPortAttributeNameKey,
+				@"", QCPortAttributeDefaultValueKey, nil];
+	}
+	if ([key isEqualToString:@"inputLabel"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"OSC Label", QCPortAttributeNameKey,
 				@"", QCPortAttributeDefaultValueKey, nil];
 	}
 	if ([key isEqualToString:@"outputMessageReceived"]) {
@@ -191,10 +195,14 @@
 		[messageLock unlock];
 	}
 	
-	if ([self didValueForInputKeyChange:@"inputReceivingPort"]) {
+	if ([self didValueForInputKeyChange:@"inputReceivingPort"]||[self didValueForInputKeyChange:@"inputLabel"]) {
 		if (self.oscPort)
 			[[BBOSCManager sharedManager] removeInput:self.oscPort];
-		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
+		
+		NSString* label = self.inputLabel;
+		if (![label length])
+			label = [NSString stringWithFormat:@"BBOSC-%u", self.inputReceivingPort];
+		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:label];
 		self.oscPort.delegate = self;
 		if (!self.oscPort)
 			NSLog(@"Failed to create input port");
@@ -239,7 +247,7 @@
 - (void) disableExecution:(id<QCPlugInContext>)context
 {
 	if (self.oscPort) {
-		[[BBOSCManager sharedManager] removeOutput:self.oscPort];
+		[[BBOSCManager sharedManager] removeInput:self.oscPort];
 		self.oscPort = nil;
 	}
 }

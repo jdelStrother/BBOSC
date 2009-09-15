@@ -167,7 +167,7 @@
 	if ([self didValueForInputKeyChange:@"inputBroadcastAddress"] || [self didValueForInputKeyChange:@"inputBroadcastPort"]) {
 		if (self.oscPort)
 			[[BBOSCManager sharedManager] removeOutput:self.oscPort];
-		self.oscPort = [[BBOSCManager sharedManager] createNewOutputToAddress:self.inputBroadcastAddress atPort:self.inputBroadcastPort withLabel:@"BB OSC"];
+		self.oscPort = [[BBOSCManager sharedManager] createNewOutputToAddress:self.inputBroadcastAddress atPort:self.inputBroadcastPort withLabel:@"BB OSC Output"];
 		if (!self.oscPort)
 			NSLog(@"Failed to create output port");
 		inputsChanged = YES;
