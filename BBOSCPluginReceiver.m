@@ -91,6 +91,7 @@
 	if(self = [super init]) {
 		self.oscParameters = [NSArray array];
 		messages = [[NSMutableArray alloc] init];
+		messageLock = [[NSLock alloc] init];
 		listeningPath = @"";
 	}
 	
@@ -110,6 +111,7 @@
 {
 	[oscPort release];
 	[messages release];
+	[messageLock release];
 	[listeningPath release];
 	[oscParameters release];
 	[retryTime release];
@@ -151,9 +153,11 @@
 
 
 - (void) receivedOSCMessage:(OSCMessage *)m {
+	[messageLock lock];
 	if ([[m address] hasPrefix:self.listeningPath]) {
 		[messages addObject:m];
 	}
+	[messageLock unlock];
 }
 @end
 
@@ -187,8 +191,10 @@
 	*/
 	
 	if ([self didValueForInputKeyChange:@"inputReceivingPath"]) {
+		[messageLock lock];
 		self.listeningPath = self.inputReceivingPath;
 		[messages removeAllObjects];
+		[messageLock unlock];
 	}
 	
 	if ([self didValueForInputKeyChange:@"inputReceivingPort"]||[self didValueForInputKeyChange:@"inputLabel"] || (self.retryTime && [self.retryTime timeIntervalSinceNow]<0)) {
@@ -215,6 +221,7 @@
 		}
 	}
 	
+	[messageLock lock];
 	if ([messages count]==0) {
 		self.outputMessageReceived = NO;
 	} else {
@@ -244,6 +251,7 @@
 		else
 			[messages removeObjectAtIndex:0];
 	}
+	[messageLock unlock];
 	
 	return YES;
 }

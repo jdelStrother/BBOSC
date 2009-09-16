@@ -47,9 +47,6 @@
 }
 
 - (void) receivedOSCMessage:(OSCMessage *)m {
-	// Bounce off to the main thread so plugins don't have to worry about locking
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[delegates makeObjectsPerformSelector:@selector(receivedOSCMessage:) withObject:m];
-	});
+	[delegates makeObjectsPerformSelector:@selector(receivedOSCMessage:) withObject:m];
 }
 @end

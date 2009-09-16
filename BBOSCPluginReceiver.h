@@ -11,6 +11,7 @@
 @class BBOSCInPort;
 @interface BBOSCPluginReceiver : QCPlugIn {
 	NSMutableArray* messages;
+	NSLock* messageLock;
 }
 @property (nonatomic, readonly, retain) NSString* listeningPath;
 @property (nonatomic, readonly, retain) NSArray* oscParameters;
