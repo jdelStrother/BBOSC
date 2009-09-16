@@ -65,11 +65,16 @@ static id sharedManager=nil;
 	BBOSCInPort* resultingPort = nil;
 	for(BBOSCInPort* oscPort in inputPorts) {
 		if (oscPort.port == p) {
-			NSAssert([oscPort.portLabel isEqualToString:l], @"Need to be using the same label");
 			resultingPort = oscPort;
 			break;
 		}
 	}
+	
+	if (resultingPort && ![resultingPort.portLabel isEqualToString:l]) {
+		NSLog(@"Need to be using the same label");
+		return nil;
+	}
+	
 	if (!resultingPort) {
 		resultingPort = [[[BBOSCInPort alloc] initWithManager:oscManager withPort:p label:l] autorelease];
 	}
