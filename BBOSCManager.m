@@ -77,6 +77,8 @@ static id sharedManager=nil;
 	
 	if (!resultingPort) {
 		resultingPort = [[[BBOSCInPort alloc] initWithManager:oscManager withPort:p label:l] autorelease];
+		if (!resultingPort)
+			return nil;
 	}
 
 	// This is a counted set, so we always add the port, so we can keep track of how many people are using it.

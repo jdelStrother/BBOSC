@@ -11,9 +11,14 @@
 
 @implementation BBOSCInPort
 -(id)initWithManager:(OSCManager*)manager withPort:(unsigned int)p label:(NSString*)l {
+	OSCInPort* newPort = [manager createNewInputForPort:p withLabel:l];
+	if (!newPort) {
+		[self release];
+		return nil;
+	}
 	if (self = [super init]) {
 		oscManager = [manager retain];
-		oscPort = [[oscManager createNewInputForPort:p withLabel:l] retain];
+		oscPort = [newPort retain];
 		oscPort.delegate = self;
 		delegates = [[NSMutableSet alloc] init];
 	}
