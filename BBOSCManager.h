@@ -8,16 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class OSCManager, OSCInPort, OSCOutPort;
+@class OSCManager, BBOSCInPort, OSCOutPort;
 @interface BBOSCManager : NSObject {
 	OSCManager* oscManager;
 	
 	NSCountedSet* inputPorts;
 }
-+(id)sharedManager;
++(BBOSCManager*)sharedManager;
 
-- (OSCInPort*)createNewInputForPort:(int)p withLabel:(NSString *)l;
+- (BBOSCInPort*)createNewInputForPort:(int)p withLabel:(NSString *)l;
 - (OSCOutPort*)createNewOutputToAddress:(NSString *)a atPort:(int)p withLabel:(NSString *)l;
-- (void)removeInput:(id)p;
-- (void)removeOutput:(id)p;
+- (void)removeInput:(BBOSCInPort*)p;
+- (void)removeOutput:(OSCOutPort*)p;
 @end

@@ -8,7 +8,7 @@
 
 #import <Quartz/Quartz.h>
 
-@class OSCInPort;
+@class BBOSCInPort;
 @interface BBOSCPluginReceiver : QCPlugIn {
 	NSMutableArray* messages;
 	NSLock* messageLock;
@@ -17,7 +17,7 @@
 
 @property (nonatomic, readonly, retain) NSArray* oscParameters;
 
-@property (nonatomic, readonly, retain) OSCInPort *oscPort;  
+@property (nonatomic, readonly, retain) BBOSCInPort *oscPort;  
 
 @property (nonatomic, readwrite, assign) BOOL inputDiscardExcessMessages;
 @property (nonatomic, readwrite, assign) NSUInteger inputReceivingPort;

@@ -9,6 +9,7 @@
 #import "BBOSCManager.h"
 #import "OSCExtensions.h"
 #import "NSArrayExtensions.h"
+#import "BBOSCInPort.h"
 
 @interface BBOSCBroadcastPort : NSObject {
 	OSCManager* oscManager;
@@ -45,7 +46,7 @@
 @implementation BBOSCManager
 
 static id sharedManager=nil;
-+(id)sharedManager {
++(BBOSCManager*)sharedManager {
 	if (!sharedManager)
 		sharedManager = [[self alloc] init];
 	return sharedManager;
@@ -59,19 +60,21 @@ static id sharedManager=nil;
 	return self;
 }
 
-- (OSCInPort *) createNewInputForPort:(int)p withLabel:(NSString *)l {
+- (BBOSCInPort *) createNewInputForPort:(int)p withLabel:(NSString *)l {
 	// Search for any existing oscPorts with the same port number, and re-use them when possible
-	OSCInPort* resultingPort = nil;
-	for(OSCInPort* oscPort in inputPorts) {
+	BBOSCInPort* resultingPort = nil;
+	for(BBOSCInPort* oscPort in inputPorts) {
 		if (oscPort.port == p) {
 			NSAssert([oscPort.portLabel isEqualToString:l], @"Need to be using the same label");
 			resultingPort = oscPort;
 			break;
 		}
 	}
-	if (!resultingPort)
-		resultingPort = [oscManager createNewInputForPort:p withLabel:l];
+	if (!resultingPort) {
+		resultingPort = [[[BBOSCInPort alloc] initWithManager:oscManager withPort:p label:l] autorelease];
+	}
 
+	// This is a counted set, so we always add the port, so we can keep track of how many people are using it.
 	[inputPorts addObject:resultingPort];
 	
 	return resultingPort;
@@ -81,13 +84,13 @@ static id sharedManager=nil;
 		return [[[BBOSCBroadcastPort alloc] initWithManager:oscManager atPort:p] autorelease];
 	return [oscManager createNewOutputToAddress:a atPort:p withLabel:l];
 }
-- (void) removeInput:(id)p {
+- (void) removeInput:(BBOSCInPort*)p {
 	[inputPorts removeObject:p];
 	// Once noone is using that input any more, remove it from the oscManager.
 	if ([inputPorts countForObject:p] == 0)
-		[oscManager removeInput:p];
+		[p remove];
 }
-- (void) removeOutput:(id)p {
+- (void) removeOutput:(OSCOutPort*)p {
 	[oscManager removeOutput:p];
 }
 

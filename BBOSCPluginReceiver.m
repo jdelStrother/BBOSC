@@ -13,12 +13,13 @@
 #import "NSArrayExtensions.h"
 #import "OSCExtensions.h"
 #import "BBOSCManager.h"
+#import "BBOSCInPort.h"
 
 #define	kQCPlugIn_Name				@"BBOSC Receiver"
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control receiver plugin"
 
 @interface BBOSCPluginReceiver ()
-@property (nonatomic, readwrite, retain) OSCOutPort *oscPort;
+@property (nonatomic, readwrite, retain) BBOSCInPort *oscPort;
 @property (nonatomic, readwrite, retain) NSArray* oscParameters;
 @property (nonatomic, readwrite, retain) NSString* listeningPath;
 @end
@@ -192,7 +193,7 @@
 		if (self.oscPort)
 			[[BBOSCManager sharedManager] removeInput:self.oscPort];
 		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
-		self.oscPort.delegate = self;
+		[self.oscPort addDelegate:self];
 		if (!self.oscPort)
 			NSLog(@"Failed to created input port");
 	}
@@ -235,7 +236,7 @@
 - (void) disableExecution:(id<QCPlugInContext>)context
 {
 	if (self.oscPort) {
-		[[BBOSCManager sharedManager] removeOutput:self.oscPort];
+		[[BBOSCManager sharedManager] removeInput:self.oscPort];
 		self.oscPort = nil;
 	}
 }
