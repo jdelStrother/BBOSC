@@ -13,10 +13,9 @@
 	NSMutableArray* messages;
 }
 @property (nonatomic, readonly, retain) NSString* listeningPath;
-
 @property (nonatomic, readonly, retain) NSArray* oscParameters;
-
-@property (nonatomic, readonly, retain) BBOSCInPort *oscPort;  
+@property (nonatomic, readonly, retain) BBOSCInPort *oscPort;
+@property (nonatomic, readonly, retain) NSDate* retryTime; 
 
 @property (nonatomic, readwrite, assign) BOOL inputDiscardExcessMessages;
 @property (nonatomic, readwrite, assign) NSUInteger inputReceivingPort;

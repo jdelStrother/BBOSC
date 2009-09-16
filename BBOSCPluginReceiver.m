@@ -21,11 +21,12 @@
 @property (nonatomic, readwrite, retain) BBOSCInPort *oscPort;
 @property (nonatomic, readwrite, retain) NSArray* oscParameters;
 @property (nonatomic, readwrite, retain) NSString* listeningPath;
+@property (nonatomic, readwrite, retain) NSDate* retryTime;
 @end
 
 @implementation BBOSCPluginReceiver
 @dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, inputLabel, outputError, outputMessageReceived, outputMessagePath;
-@synthesize oscPort, oscParameters, listeningPath;
+@synthesize oscPort, oscParameters, listeningPath, retryTime;
 
 + (NSDictionary*) attributes
 {
@@ -111,6 +112,7 @@
 	[messages release];
 	[listeningPath release];
 	[oscParameters release];
+	[retryTime release];
 	[super dealloc];
 }
 
@@ -189,7 +191,7 @@
 		[messages removeAllObjects];
 	}
 	
-	if ([self didValueForInputKeyChange:@"inputReceivingPort"]||[self didValueForInputKeyChange:@"inputLabel"]) {
+	if ([self didValueForInputKeyChange:@"inputReceivingPort"]||[self didValueForInputKeyChange:@"inputLabel"] || (self.retryTime && [self.retryTime timeIntervalSinceNow]<0)) {
 		if (self.oscPort) {
 			NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];	// OSC only closes the socket once the port gets dealloced - be careful to force it to release as soon as possible
 			[[BBOSCManager sharedManager] removeInput:self.oscPort];
@@ -202,9 +204,15 @@
 			label = [NSString stringWithFormat:@"BBOSC-%u", self.inputReceivingPort];
 		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:label];
 		[self.oscPort addDelegate:self];
-		if (!self.oscPort)
+
+		if (self.oscPort) {
+			self.retryTime = nil;
+			self.outputError = NO;
+		} else {
 			NSLog(@"Failed to create input port");
-		self.outputError = !self.oscPort;
+			self.retryTime = [NSDate dateWithTimeIntervalSinceNow:1];
+			self.outputError = YES;
+		}
 	}
 	
 	if ([messages count]==0) {
