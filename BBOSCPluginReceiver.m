@@ -13,7 +13,6 @@
 #import "NSArrayExtensions.h"
 #import "OSCExtensions.h"
 #import "BBOSCManager.h"
-#import "BBOSCInPort.h"
 
 #define	kQCPlugIn_Name				@"BBOSC Receiver"
 #define	kQCPlugIn_Description		@"Best Before Open Sound Control receiver plugin"
@@ -25,7 +24,7 @@
 @end
 
 @implementation BBOSCPluginReceiver
-@dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, outputMessageReceived, outputMessagePath;
+@dynamic inputDiscardExcessMessages, inputReceivingPort, inputReceivingPath, inputLabel, outputError, outputMessageReceived, outputMessagePath;
 @synthesize oscPort, oscParameters, listeningPath;
 
 + (NSDictionary*) attributes
@@ -54,8 +53,15 @@
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Receiving Path", QCPortAttributeNameKey,
 				@"", QCPortAttributeDefaultValueKey, nil];
 	}
+	if ([key isEqualToString:@"inputLabel"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"OSC Label", QCPortAttributeNameKey,
+				@"", QCPortAttributeDefaultValueKey, nil];
+	}
 	if ([key isEqualToString:@"outputMessageReceived"]) {
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Message Received", QCPortAttributeNameKey, nil];
+	}
+	if ([key isEqualToString:@"outputError"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Port Error", QCPortAttributeNameKey, nil];
 	}
 	
 	return nil;
@@ -183,13 +189,22 @@
 		[messages removeAllObjects];
 	}
 	
-	if ([self didValueForInputKeyChange:@"inputReceivingPort"]) {
-		if (self.oscPort)
+	if ([self didValueForInputKeyChange:@"inputReceivingPort"]||[self didValueForInputKeyChange:@"inputLabel"]) {
+		if (self.oscPort) {
+			NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];	// OSC only closes the socket once the port gets dealloced - be careful to force it to release as soon as possible
 			[[BBOSCManager sharedManager] removeInput:self.oscPort];
-		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:@"BB OSC"];
+			self.oscPort = nil;
+			[pool release];
+		}
+		
+		NSString* label = self.inputLabel;
+		if (![label length])
+			label = [NSString stringWithFormat:@"BBOSC-%u", self.inputReceivingPort];
+		self.oscPort = [[BBOSCManager sharedManager] createNewInputForPort:self.inputReceivingPort withLabel:label];
 		[self.oscPort addDelegate:self];
 		if (!self.oscPort)
-			NSLog(@"Failed to created input port");
+			NSLog(@"Failed to create input port");
+		self.outputError = !self.oscPort;
 	}
 	
 	if ([messages count]==0) {
