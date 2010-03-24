@@ -22,7 +22,9 @@ typedef enum {
 	BBOSCTypeCount
 } BBOSCType;
 
-@interface BBOSCViewController : QCPlugInViewController {}
+@interface BBOSCViewController : QCPlugInViewController {
+	id portTypeDropDown, portArrayController;
+}
 @property (nonatomic, readonly, assign) IBOutlet NSPopUpButton* portTypeDropDown;
 @property (nonatomic, readonly, assign) IBOutlet NSArrayController* portArrayController;
 -(IBAction)addNewPort:(id)sender;

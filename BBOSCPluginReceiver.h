@@ -12,6 +12,7 @@
 @interface BBOSCPluginReceiver : QCPlugIn {
 	NSMutableArray* messages;
 	NSLock* messageLock;
+	id oscPort, oscParameters, listeningPath, retryTime;
 }
 @property (nonatomic, readonly, retain) NSString* listeningPath;
 @property (nonatomic, readonly, retain) NSArray* oscParameters;

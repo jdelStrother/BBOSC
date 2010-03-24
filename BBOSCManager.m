@@ -10,6 +10,7 @@
 #import "OSCExtensions.h"
 #import "NSArrayExtensions.h"
 #import "BBOSCInPort.h"
+#import <VVOSC/OSCOutPort.h>
 
 @interface BBOSCBroadcastPort : NSObject {
 	OSCManager* oscManager;
@@ -36,7 +37,7 @@
 -(void)sendThisMessage:(OSCMessage*)message {
 	// Broadcast to all discovered outPorts with the same port number as us.
 	[[oscManager outPortArray] rdlock];
-	NSArray* suitablePorts = [[[oscManager outPortArray] array] select:^BOOL(OSCOutPort* oscPort){return (oscPort.port == portNumber);}];
+	NSArray* suitablePorts = [[[oscManager outPortArray] array] select:^BOOL(id oscPort){return (((OSCOutPort*)oscPort).port == portNumber);}];
 	[[oscManager outPortArray] unlock];
 	[suitablePorts makeObjectsPerformSelector:@selector(sendThisMessage:) withObject:message];
 

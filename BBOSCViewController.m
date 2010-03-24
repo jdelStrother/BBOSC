@@ -28,6 +28,7 @@ NSString* BBOSCPortKey=@"BBOSCPortKey";
 		case BBOSCTypeArrayOfBool: return @"Array w/ Bool bias";
 	}
 	NSAssert1(NO, @"Bad OSC type value %@", value);
+	return nil;
 }
 @end
 

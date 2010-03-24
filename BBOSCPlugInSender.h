@@ -10,7 +10,7 @@
 
 @class OSCManager, OSCOutPort;
 @interface BBOSCPlugInSender : QCPlugIn {
-
+	id oscPort, oscParameters;
 }
 @property (nonatomic, readonly, retain) OSCOutPort *oscPort;
 @property (nonatomic, readonly, retain) NSArray* oscParameters;
