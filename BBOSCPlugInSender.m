@@ -24,7 +24,7 @@
 
 @implementation BBOSCPlugInSender
 @synthesize oscPort, oscParameters;
-@dynamic inputBroadcastPort, inputBroadcastPath, inputBroadcastAddress;
+@dynamic inputBroadcastPort, inputBroadcastPath, inputBroadcastAddress, inputTickle;
 
 + (NSDictionary*) attributes
 {
@@ -47,6 +47,9 @@
 	if ([key isEqualToString:@"inputBroadcastPath"]) {
 		return [NSDictionary dictionaryWithObjectsAndKeys:@"Broadcast Path", QCPortAttributeNameKey,
 				@"/test", QCPortAttributeDefaultValueKey, nil];
+	}
+	if ([key isEqualToString:@"inputTickle"]) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:@"Mr Tickle", QCPortAttributeNameKey, nil];
 	}
 	
 	return nil;
@@ -181,6 +184,8 @@
 		}
 	}
 	if ([self didValueForInputKeyChange:@"inputBroadcastPath"])
+		inputsChanged = YES;
+	if (self.inputTickle && [self didValueForInputKeyChange:@"inputTickle"])
 		inputsChanged = YES;
 	
 	if (!inputsChanged)

@@ -18,5 +18,6 @@
 @property (nonatomic, readwrite, assign) NSString* inputBroadcastAddress;
 @property (nonatomic, readwrite, assign) NSUInteger inputBroadcastPort;
 @property (nonatomic, readwrite, assign) NSString* inputBroadcastPath;
+@property (nonatomic, readwrite, assign) BOOL inputTickle;
 
 @end
